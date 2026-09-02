@@ -1,8 +1,8 @@
 'use client'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
-import { Field, FieldLabel, FieldGroup } from "@/components/ui/field"
+import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
   Dialog,
@@ -14,64 +14,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-type MatchType = {
+import { upcomingMatches } from '@/lib/data/matches'
+import Link from 'next/link'
+import LoginSignupDialog from '@/components/login-signup-dialog'
+
+export type MatchType = {
   id: number;
   league: "EPL" | "UCL" | "AFCON";
   homeTeam: string;
   awayTeam: string;
-  tag?: string;        // e.g. "Tonight"
+  tag?: string;        
   time: string;
   date: string;
-  seatsLeft: number | null; // null when sold out
+  seatsLeft: number | null; 
   price: number;
   soldOut?: boolean;
 };
 
-const upcomingMatches: MatchType[] = [
-  {
-    id: 1,
-    league: "EPL",
-    homeTeam: "Man City",
-    awayTeam: "Arsenal",
-    tag: "Today",
-    time: "8:00 PM",
-    date: "Fri 20 Jun",
-    seatsLeft: 12,
-    price: 1000,
-  },
-  {
-    id: 2,
-    league: "UCL",
-    homeTeam: "Real Madrid",
-    awayTeam: "Bayern Munich",
-    time: "9:00 PM",
-    date: "Sat 21 Jun",
-    seatsLeft: 8,
-    price: 1000,
-  },
-  {
-    id: 3,
-    league: "EPL",
-    homeTeam: "Liverpool",
-    awayTeam: "Chelsea",
-    time: "7:30 PM",
-    date: "Sun 22 Jun",
-    seatsLeft: null,
-    price: 1000,
-    soldOut: true,
-  },
-  {
-    id: 4,
-    league: "AFCON",
-    homeTeam: "Nigeria",
-    awayTeam: "Ghana",
-    time: "6:00 PM",
-    date: "Tue 24 Jun",
-    seatsLeft: 34,
-    price: 1000,
-  },
-];
 
 type userType = {
   name: string,
@@ -89,18 +48,33 @@ export default function Home() {
   } 
 
   const [selectedMatch, setSelectedMatch] = useState<MatchType|null>(null)
+  const [userLoggedIn, setUserLoggedIn] = useState(false)
+  
+  useEffect(()=>{
+    setUserLoggedIn(localStorage.getItem('userLoggedIn') === 'true')
+  },[])
 
   const handleBooking = (match:MatchType)=>{
       setSelectedMatch(match)
   }
+
+  const handleLoginSuccess = () => {
+    setUserLoggedIn(true)
+  }
   
   return (
     <section className="relative w-full h-full">
-      <div className="px-4 py-4 bg-[#0f0f12] h-full">
+      <div className="  h-full">
         <div className="flex items-center justify-between ">
-            <p className="text-lg">
-              Welcome, <span className="text-amber-400">{userDetails.name.toUpperCase()}</span>
-            </p>
+           {userLoggedIn ? (
+             <p className="text-lg">
+             Welcome, <span className="text-amber-400">{userDetails.name.toUpperCase()}</span>
+           </p>
+           ):(
+            <div className="">
+                <LoginSignupDialog onLoginSuccessAction={handleLoginSuccess} />
+            </div>
+           )}
 
             <Field className="w-1/2">
               <ButtonGroup className=" rounded-md">
@@ -138,67 +112,59 @@ export default function Home() {
 
         {/* list of upcoming matches */}
         <div className="flex flex-col gap-2 mt-4">
-        {upcomingMatches.map((match) => (
-          <div key={match.id} className="bg-primary text-sm text-foreground/30 border border-foreground/10 px-6 py-4 flex flex-row items-center gap-12 w-full rounded-lg">
-            <span className="">{match.league}</span>
+          {upcomingMatches.slice(0,4).map((match) => (
+            <div key={match.id} className="bg-primary text-sm text-foreground/30 border border-foreground/10 px-6 py-4 flex flex-row items-center gap-12 w-full rounded-lg">
+              <span className="">{match.league}</span>
 
-            <div className="space-x-2 text-foreground/80">
-              <span className="">{match.homeTeam}</span>
-              <span>vs</span>
-              <span className="">{match.awayTeam}</span>
-            </div>
+              <div className="space-x-2 text-foreground/80">
+                <span className="">{match.homeTeam}</span>
+                <span>vs</span>
+                <span className="">{match.awayTeam}</span>
+              </div>
 
-            {match.tag && <span className="text-xs text-secondary">{match.tag}</span>}
-            <span>{match.time}</span>
-            <span className="text-xs">{match.date}</span>
-            <span className="text-xs flex items-center gap-1"><h6 className="text-secondary-foreground">{match.soldOut ? "Sold out" : `${match.seatsLeft} seats left`}</h6></span>
-            {/* <button onClick={()=>handleBooking(match)} 
-            disabled={match.soldOut} className="cursor-pointer bg-secondary text-foreground p-2 rounded-md disabled:bg-transparent">
-              {match.soldOut ? "Full" : `Book (₦${match.price.toLocaleString()})`}
-            </button> */}
-
-            
-          <Dialog>
-          <form>
-            <DialogTrigger render={<Button onClick={()=>handleBooking(match)} 
-            disabled={match.soldOut} className="cursor-pointer text-foreground p-2 rounded-md disabled:bg-transparent">
-              {match.soldOut ? "Full" : `Book (₦${match.price.toLocaleString()})`}
-              </Button>} />
-            
-              {selectedMatch && (
-            <DialogContent className="sm:max-w-sm bg-primary">
-              <DialogHeader>
-                <DialogTitle className='text-center text-2xl text-secondary-foreground'>Match Details</DialogTitle>
-              </DialogHeader>
-             
-                <div className="flex flex-col gap-4 items-center justify-center w-full">
-                  <span className='text-foreground  px-2 py-1 rounded-md w-fit border border-secondary-foreground text-sm'>
-                  {selectedMatch.seatsLeft !== null
-                    ? `${selectedMatch.seatsLeft} seat${selectedMatch.seatsLeft > 1 ? 's' : ''} left`
-                    : 'Sold out'}
-                    </span>
-                  <p className="text-foreground text-xl">
-                    {selectedMatch.homeTeam} vs {selectedMatch.awayTeam}
-                  </p>
-                  <span className='flex items-center text-foreground/80 text-md'>
-                    {selectedMatch.league} - {selectedMatch.time.toUpperCase()}
-                  </span>
-                </div>
-                
-              <DialogFooter>
-                <Button type="submit" >Book Now</Button>
-              </DialogFooter>
-            </DialogContent>
-        )}
-
-          </form>
-          
-        </Dialog>
+              {match.tag && <span className="text-xs text-secondary">{match.tag}</span>}
+              <span>{match.time}</span>
+              <span className="text-xs">{match.date}</span>
+              <span className="text-xs flex items-center gap-1"><h6 className="text-secondary-foreground">{match.soldOut ? "Sold out" : `${match.seatsLeft} seats left`}</h6></span>
+              
+              <Dialog>
+                  <form>
+                    <DialogTrigger render={<Button onClick={()=>handleBooking(match)} 
+                    disabled={match.soldOut} className="cursor-pointer text-foreground p-2 rounded-md disabled:bg-transparent">
+                      {match.soldOut ? "Full" : `Book (₦${match.price.toLocaleString()})`}
+                      </Button>} />
+                    
+                      {selectedMatch && (
+                    <DialogContent className="sm:max-w-sm bg-primary">
+                      <DialogHeader>
+                        <DialogTitle className='text-center text-2xl text-secondary-foreground'>Match Details</DialogTitle>
+                      </DialogHeader>
+                    
+                        <div className="flex flex-col gap-4 items-center justify-center w-full">
+                          <span className='text-foreground  px-2 py-1 rounded-md w-fit border border-secondary-foreground text-sm'>
+                          {selectedMatch.seatsLeft !== null
+                            ? `${selectedMatch.seatsLeft} seat${selectedMatch.seatsLeft > 1 ? 's' : ''} left`
+                            : 'Sold out'}
+                          </span>
+                          <p className="text-foreground text-xl">
+                            {selectedMatch.homeTeam} vs {selectedMatch.awayTeam}
+                          </p>
+                          <span className='flex items-center text-foreground/80 text-md'>
+                            {selectedMatch.league} - {selectedMatch.time.toUpperCase()}
+                          </span>
+                        </div>
+                        
+                      <DialogFooter>
+                      <DialogClose render={<Button className='bg-red-600 hover:bg-red-600/50'>Cancel</Button>} />
+                        <Button type="submit" >Book Now</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                )}
+                </form>
+              </Dialog>
           </div>
-        ))}
+           ))}
         </div>
-
-        
       </div>
     </section>
   );

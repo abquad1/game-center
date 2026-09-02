@@ -1,8 +1,11 @@
+import MatchesList from '@/components/matches-list'
 import React from 'react'
 
 function Matches() {
   return (
-    <div>Matches</div>
+    <div>
+        <MatchesList/>
+    </div>
   )
 }
 

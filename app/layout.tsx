@@ -50,16 +50,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", TomatoGrotesk.variable, conthrax.variable, "font-sans", geist.variable)}
+      className={cn("h-full", "antialiased", TomatoGrotesk.variable, conthrax.variable, "font-sans")}
     >
-      <body className="overflow-x-hidden h-full text-foreground bg-background flex flex-row w-full">
-
-          <Sidebar/>
-        <main className=" w-full">
-            {children}
-          {/* <Toaster/> */}
+      <body className="overflow-x-hidden text-foreground bg-background flex flex-row w-full h-full">
+        <Sidebar/>
+        <main className="flex-1 h-screen overflow-y-auto px-4 py-4 bg-[#0f0f12]">
+          {children}
         </main>
-        
       </body>
     </html>
   );
