@@ -1,4 +1,5 @@
 import React from 'react'
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { Button } from "@/components/ui/button"
 import { FaRegEdit } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -13,11 +14,6 @@ type PopoverListType = {
 }
 
 const popoverList:PopoverListType[] = [
-    {
-        name: 'Edit Profile',
-        icon: <FaRegEdit/>,
-        link: '/edit-profile'
-    },
     {
         name: 'Log Out',
         icon: <CiLogout/>,
@@ -37,7 +33,6 @@ import {
 } from "@/components/ui/popover"
 import Link from 'next/link';
 import ProfileContent from '@/components/profile-content';
-import BookingHistoryTable from '@/components/booking-history';
 
 function Profile() {
   return (
@@ -51,7 +46,7 @@ function Profile() {
                 <div className="">
                 <Popover>
                     <PopoverTrigger render={<Button className='bg-secondary-foreground/20 rounded-lg cursor-pointer hover:bg-secondary-foreground/20'>
-                        <IoSettingsOutline/>
+                        <BsThreeDotsVertical/>
                     </Button>} />
                     <PopoverContent className="w-36 py-4 bg-primary/80 backdrop-blur-md text-foreground mr-6">
                         <ul className="flex flex-col gap-8">
@@ -77,7 +72,6 @@ function Profile() {
                 <ProfileContent/>
             </div>
 
-            
         </div>
     </section>
   )
