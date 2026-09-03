@@ -43,7 +43,6 @@ type SignupFormValues = z.infer<typeof signupSchema>
 
 export default function LoginSignupDialog({onLoginSuccessAction }: { onLoginSuccessAction?: () => void }) {
   const [mode, setMode] = useState<AuthMode>("login")
-  const router = useRouter();
 
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),

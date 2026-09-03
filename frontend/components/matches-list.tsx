@@ -1,12 +1,14 @@
 'use client'
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/lib/context/authContext"
 import { upcomingMatches } from '@/lib/data/matches'
 import Link from 'next/link'
 
 function MatchesList() {
+    const {userLoggedIn} = useAuth()
   return (
     <section>
-      <div className="flex flex-col gap-2 mt-4">
+      <div className="flex flex-col gap-2">
         {upcomingMatches.map((match) => (
           <div key={match.id} className="bg-primary text-sm text-foreground/30 border border-foreground/10 px-6 py-4 flex flex-row items-center gap-12 w-full rounded-lg">
             <span>{match.league}</span>
@@ -31,7 +33,7 @@ function MatchesList() {
                 Full
               </Button>
             ) : (
-              <Button className="cursor-pointer text-foreground p-2 rounded-md">
+              <Button disabled={!userLoggedIn} className="cursor-pointer text-foreground p-2 rounded-md disabled:bg-transparent">
                 <Link href={`/matches/${match.id}`}>
                   Book (₦{match.price.toLocaleString()})
                 </Link>

@@ -17,6 +17,8 @@ import {
 import { upcomingMatches } from '@/lib/data/matches'
 import Link from 'next/link'
 import LoginSignupDialog from '@/components/login-signup-dialog'
+import { useAuth } from '@/lib/context/authContext'
+import { LuBadgeInfo, LuBadgeRussianRuble } from "react-icons/lu";
 
 export type MatchType = {
   id: number;
@@ -48,19 +50,14 @@ export default function Home() {
   } 
 
   const [selectedMatch, setSelectedMatch] = useState<MatchType|null>(null)
-  const [userLoggedIn, setUserLoggedIn] = useState(false)
-  
-  useEffect(()=>{
-    setUserLoggedIn(localStorage.getItem('userLoggedIn') === 'true')
-  },[])
+
+  const {userLoggedIn, login} = useAuth()
 
   const handleBooking = (match:MatchType)=>{
       setSelectedMatch(match)
   }
 
-  const handleLoginSuccess = () => {
-    setUserLoggedIn(true)
-  }
+  
   
   return (
     <section className="relative w-full h-full">
@@ -72,14 +69,14 @@ export default function Home() {
            </p>
            ):(
             <div className="">
-                <LoginSignupDialog onLoginSuccessAction={handleLoginSuccess} />
+                <LoginSignupDialog onLoginSuccessAction={login} />
             </div>
            )}
 
             <Field className="w-1/2">
               <ButtonGroup className=" rounded-md">
-                <Input id="input-button-group" placeholder="Type to search..." />
-                <Button className='bg-[#1d1d1d]' >Search</Button>
+                <Input id="input-button-group" className='border-none' placeholder="Type to search..." />
+                <Button className='bg-[#1d1d1d] ' >Search</Button>
               </ButtonGroup>
             </Field>
 
@@ -88,22 +85,36 @@ export default function Home() {
         <div className="h-px w-full bg-primary shrink-0 mt-4"></div>
 
         {/* details card */}
-        <div className="w-full flex flex-row gap-8 mt-8">
-            <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-              <h3 className="text-foreground text-2xl">{userDetails.totalMatches}</h3>
-              <p className="text-foreground/30 text-sm">Match Attended</p>
-            </div>
-            
-            <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-              <h3 className="text-secondary text-2xl">#{userDetails.totalSpent}</h3>
-              <p className="text-foreground/30  text-sm">Total Spent</p>
-            </div>
 
-            <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-              <h3 className="text-secondary-foreground text-2xl">{userDetails.upcomingTicket}</h3>
-              <p className="text-foreground/30 text-sm">Upcoming Tickets</p>
-            </div>
+        {userLoggedIn? (
+          <div className="w-full flex flex-row gap-8 mt-8">
+          <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
+            <h3 className="text-foreground text-2xl">{userDetails.totalMatches}</h3>
+            <p className="text-foreground/30 text-sm">Match Attended</p>
+          </div>
+          
+          <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
+            <h3 className="text-secondary text-2xl">#{userDetails.totalSpent}</h3>
+            <p className="text-foreground/30  text-sm">Total Spent</p>
+          </div>
+
+          <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
+            <h3 className="text-secondary-foreground text-2xl">{userDetails.upcomingTicket}</h3>
+            <p className="text-foreground/30 text-sm">Upcoming Tickets</p>
+          </div>
+      </div>
+        ):(
+        <div className="bg-primary border border-foreground/10 p-4 flex items-center gap-4 w-full rounded-lg">
+          <LuBadgeInfo className='text-secondary-foreground'/>
+          <div className="">
+              You're browsing as a guest. {' '}
+              <span className="text-secondary-foreground font-bold">
+                Login or sign up 
+              </span> to book seats and view your tickets
+            </div>            
         </div>
+        )}
+
 
         <div className="w-full flex items-center text-sm justify-between mt-4">
             <p className="font-bold text-foreground/80">Upcoming matches</p>
@@ -129,8 +140,8 @@ export default function Home() {
               
               <Dialog>
                   <form>
-                    <DialogTrigger render={<Button onClick={()=>handleBooking(match)} 
-                    disabled={match.soldOut} className="cursor-pointer text-foreground p-2 rounded-md disabled:bg-transparent">
+                    <DialogTrigger render={<Button onClick={()=>handleBooking(match)}
+                    disabled={match.soldOut || !userLoggedIn} className="cursor-pointer text-foreground p-2 rounded-md disabled:bg-transparent">
                       {match.soldOut ? "Full" : `Book (₦${match.price.toLocaleString()})`}
                       </Button>} />
                     

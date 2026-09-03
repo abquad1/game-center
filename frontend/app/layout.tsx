@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Sidebar from "@/components/sidebar";
+import { AuthProvider } from "@/lib/context/authContext";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -53,10 +54,12 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", TomatoGrotesk.variable, conthrax.variable, "font-sans")}
     >
       <body className="overflow-x-hidden text-foreground bg-background flex flex-row w-full h-full">
-        <Sidebar/>
-        <main className="flex-1 h-screen overflow-y-auto px-4 py-4 bg-[#0f0f12]">
-          {children}
-        </main>
+        <AuthProvider>
+          <Sidebar/>
+          <main className="flex-1 h-screen overflow-y-auto px-4 py-8  bg-[#0f0f12]">
+            {children}
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );

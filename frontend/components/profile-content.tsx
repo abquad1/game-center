@@ -3,6 +3,8 @@ import { CiPhone,CiCalendarDate,CiMail  } from "react-icons/ci";
 import BookingHistoryTable from './booking-history';
 import Link from 'next/link';
 import { FaRegEdit } from 'react-icons/fa';
+import { useAuth } from '@/lib/context/authContext';
+import { LuBadgeInfo } from 'react-icons/lu';
 
 type userType = {
     name: string,
@@ -34,12 +36,14 @@ function ProfileContent() {
     const phone = personalInfo.phone
     const date = personalInfo.date
 
+    const {userLoggedIn} = useAuth()
+
   return (
-    <section className='relative w-full'>
-        <div className="w-full">
+    <section className='relative w-full h-full'>
+        <div className="w-full h-full">
             {/* first card */}
-            <div className="flex items-start justify-between gap-4 bg-primary border border-foreground/10 px-6 py-6">
-                <div className="flex items-center gap-4">
+            <div className=" flex items-start justify-between gap-4 bg-primary border border-foreground/10 px-6 py-6">
+                <div className="flex items-center gap-4 ">
                     <div className="flex items-center font-bold justify-center h-16 w-16 text-foreground bg-secondary rounded-full text-2xl">
                         {initials}
                     </div>
@@ -102,8 +106,7 @@ function ProfileContent() {
             </div>
 
             <div className=" py-8">
-            <BookingHistoryTable/>
-
+                <BookingHistoryTable/>
             </div>
         </div>
     </section>
