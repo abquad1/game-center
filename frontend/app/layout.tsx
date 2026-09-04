@@ -3,7 +3,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/customers/sidebar";
 import { AuthProvider } from "@/lib/context/authContext";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});

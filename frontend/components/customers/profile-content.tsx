@@ -4,7 +4,6 @@ import BookingHistoryTable from './booking-history';
 import Link from 'next/link';
 import { FaRegEdit } from 'react-icons/fa';
 import { useAuth } from '@/lib/context/authContext';
-import { LuBadgeInfo } from 'react-icons/lu';
 
 type userType = {
     name: string,

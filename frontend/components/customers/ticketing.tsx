@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react"
-import { myTickets, TicketType } from '../lib/data/ticket'
+import { myTickets, TicketType } from '@/lib/data/ticket'
 import { Button } from "@/components/ui/button"
 import { FiShare2 } from "react-icons/fi"
 import { BsQrCode } from "react-icons/bs"
