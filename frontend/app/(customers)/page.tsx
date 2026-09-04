@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { upcomingMatches } from '@/lib/data/matches'
 import Link from 'next/link'
-import LoginSignupDialog from '@/components/login-signup-dialog'
+import LoginSignupDialog from '@/components/customers/login-signup-dialog'
 import { useAuth } from '@/lib/context/authContext'
 import { LuBadgeInfo, LuBadgeRussianRuble } from "react-icons/lu";
 
