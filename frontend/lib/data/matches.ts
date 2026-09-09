@@ -1,4 +1,4 @@
-import { MatchType } from "@/app/page"
+import { MatchType } from "@/app/(customers)/page"
 
 export const upcomingMatches: MatchType[] = [
   {

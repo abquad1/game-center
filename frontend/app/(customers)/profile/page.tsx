@@ -2,8 +2,6 @@
 import React from 'react'
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Button } from "@/components/ui/button"
-import { FaRegEdit } from "react-icons/fa";
-import { IoSettingsOutline } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 
@@ -19,7 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import Link from 'next/link';
-import ProfileContent from '@/components/profile-content';
+import ProfileContent from '@/components/customers/profile-content';
 import { useAuth } from '@/lib/context/authContext';
 import { LuBadgeInfo } from 'react-icons/lu';
 

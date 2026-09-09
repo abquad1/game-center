@@ -1,19 +1,14 @@
 'use client'
 import { useState } from "react"
-import type { MatchType } from "@/app/page" 
+import type { MatchType } from "@/app/(customers)/page"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
   import { Button } from "@/components/ui/button"
-  import { ButtonGroup } from "@/components/ui/button-group"
-  import { Field } from "@/components/ui/field"
   import { Input } from "@/components/ui/input"
   
 export default function SeatSelector({ match }: { match: MatchType }) {
