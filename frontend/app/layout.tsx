@@ -6,10 +6,6 @@ import { cn } from "@/lib/utils";
 import Sidebar from "@/components/customers/sidebar";
 import { AuthProvider } from "@/lib/context/authContext";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-
-// import Navbar from "@/components/navbar";
 
 const TomatoGrotesk = localFont({
   src: [
@@ -53,10 +49,10 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", TomatoGrotesk.variable, conthrax.variable, "font-sans")}
     >
-      <body className="overflow-x-hidden text-foreground bg-background flex flex-row w-full h-full">
+      <body className="relative overflow-x-hidden text-foreground bg-background flex flex-row w-full h-full">
         <AuthProvider>
           <Sidebar/>
-          <main className="flex-1 h-screen overflow-y-auto px-4 py-8  bg-[#0f0f12]">
+          <main className="flex-1 h-screen overflow-y-auto px-2 md:px-4 py-4 md:py-8 pb-14 md:pb-auto bg-[#0f0f12]">
             {children}
           </main>
         </AuthProvider>

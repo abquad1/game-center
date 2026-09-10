@@ -16,7 +16,7 @@ import {
 import { upcomingMatches } from '@/lib/data/matches'
 import LoginSignupDialog from '@/components/customers/login-signup-dialog'
 import { useAuth } from '@/lib/context/authContext'
-import { LuBadgeInfo, LuBadgeRussianRuble } from "react-icons/lu";
+import { LuBadgeInfo} from "react-icons/lu";
 
 export type MatchType = {
   id: number;
@@ -55,11 +55,12 @@ export default function Home() {
       setSelectedMatch(match)
   }
 
-  
-  
   return (
-    <section className="relative w-full h-full">
-      <div className="  h-full">
+    <section className="relative w-full h-full overflow-y-auto overflow-x-hidden">
+      <div className=" h-full">
+        <h1 className="block md:hidden text-xl md:text-3xl mb-4 font-bold text-secondary-foreground">
+          BABS-SPORT
+        </h1>
         <div className="flex items-center justify-between ">
            {userLoggedIn ? (
              <p className="text-lg">
@@ -73,7 +74,7 @@ export default function Home() {
 
             <Field className="w-1/2">
               <ButtonGroup className=" rounded-md">
-                <Input id="input-button-group" className='border-none' placeholder="Type to search..." />
+                <Input id="input-button-group " className='border-none placeholder:text-xs md:placeholder:text-lg' placeholder="Type to search..." />
                 <Button className='bg-[#1d1d1d] ' >Search</Button>
               </ButtonGroup>
             </Field>
@@ -84,27 +85,28 @@ export default function Home() {
 
         {/* details card */}
 
+        <div className="">
         {userLoggedIn? (
-          <div className="w-full flex flex-row gap-8 mt-8">
-          <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-            <h3 className="text-foreground text-2xl">{userDetails.totalMatches}</h3>
-            <p className="text-foreground/30 text-sm">Match Attended</p>
-          </div>
-          
-          <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-            <h3 className="text-secondary text-2xl">#{userDetails.totalSpent}</h3>
-            <p className="text-foreground/30  text-sm">Total Spent</p>
-          </div>
+          <div className="w-full flex flex-row gap-2 md:gap-8 mt-4 md:mt-8">
+            <div className="bg-primary border border-foreground/10 px-2 md:px-4 py-4 flex flex-col w-1/3 rounded-lg">
+              <h3 className="text-foreground text-lg md:text-2xl">{userDetails.totalMatches}</h3>
+              <p className="text-foreground/50 text-xs md:text-sm">Match Attended</p>
+            </div>
+            
+            <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
+              <h3 className="text-secondary text-lg md:text-2xl">#{userDetails.totalSpent}</h3>
+              <p className="text-foreground/50  text-xs md:text-sm">Total Spent</p>
+            </div>
 
-          <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-            <h3 className="text-secondary-foreground text-2xl">{userDetails.upcomingTicket}</h3>
-            <p className="text-foreground/30 text-sm">Upcoming Tickets</p>
-          </div>
-      </div>
+            <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
+              <h3 className="text-secondary-foreground text-lg md:text-2xl">{userDetails.upcomingTicket}</h3>
+              <p className="text-foreground/50 text-xs md:text-sm">Upcoming Tickets</p>
+            </div>
+        </div>
         ):(
         <div className="bg-primary border border-foreground/10 p-4 flex items-center gap-4 w-full rounded-lg">
-          <LuBadgeInfo className='text-secondary-foreground'/>
-          <div className="">
+          <LuBadgeInfo className='text-4xl md:text-xl text-secondary-foreground'/>
+          <div className="text-sm md:text-base">
               You're browsing as a guest. {' '}
               <span className="text-secondary-foreground font-bold">
                 Login or sign up 
@@ -112,6 +114,7 @@ export default function Home() {
             </div>            
         </div>
         )}
+        </div>
 
 
         <div className="w-full flex items-center text-sm justify-between mt-4">
@@ -120,21 +123,21 @@ export default function Home() {
         </div>
 
         {/* list of upcoming matches */}
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="flex flex-col gap-2 mt-4 mb-30">
           {upcomingMatches.slice(0,4).map((match) => (
-            <div key={match.id} className="bg-primary text-sm text-foreground/30 border border-foreground/10 px-6 py-4 flex flex-row items-center gap-12 w-full rounded-lg">
+            <div key={match.id} className="bg-primary text-sm text-foreground/30 border border-foreground/10 px-2 md:px-6 py-4 flex flex-row items-center gap-4 md:gap-12 w-full rounded-lg">
               <span className="">{match.league}</span>
 
-              <div className="space-x-2 text-foreground/80">
-                <span className="">{match.homeTeam}</span>
+              <div className="space-x-2 text-foreground/80 flex flex-col items-center">
+                <span className='text-center'>{match.homeTeam}</span>
                 <span>vs</span>
-                <span className="">{match.awayTeam}</span>
+                <span className='text-center'>{match.awayTeam}</span>
               </div>
 
               {match.tag && <span className="text-xs text-secondary">{match.tag}</span>}
-              <span>{match.time}</span>
-              <span className="text-xs">{match.date}</span>
-              <span className="text-xs flex items-center gap-1"><h6 className="text-secondary-foreground">{match.soldOut ? "Sold out" : `${match.seatsLeft} seats left`}</h6></span>
+              <span className='text-center'>{match.time}</span>
+              <span className="text-xs text-center">{match.date}</span>
+              <span className="text-xs flex items-center gap-1 text-center"><h6 className="text-secondary-foreground">{match.soldOut ? "Sold out" : `${match.seatsLeft} seats left`}</h6></span>
               
               <Dialog>
                   <form>

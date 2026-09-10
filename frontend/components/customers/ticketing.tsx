@@ -27,9 +27,13 @@ const {userLoggedIn} = useAuth()
   ]
 
   return (
-    <div className="flex flex-row gap-6 w-full h-full ">
-        
-        {userLoggedIn? (
+    <div className="relative w-full h-full overflow-y-auto overflow-x-hidden">
+        <h1 className="block md:hidden text-xl md:text-3xl mb-4 font-bold text-secondary-foreground">
+          BABS-SPORT
+        </h1>
+
+        <div className="flex flex-row gap-6 w-full h-full ">
+       {userLoggedIn? (
             <>
             {/* Left — ticket list */}
             <div className="flex flex-col gap-4 w-1/2">
@@ -182,9 +186,10 @@ const {userLoggedIn} = useAuth()
                         <span className="text-secondary-foreground font-bold">Login or sign up</span>{' '}
                         to view all your tickets history
                     </div>
-                    </div>
                 </div>
+            </div>
         )}
+       </div>
             
     </div>
   )

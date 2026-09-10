@@ -39,69 +39,73 @@ function Profile() {
 
   return (
     <section className='relative w-full h-full'>
+        <div className="w-full h-full">
+
+        <h1 className="block md:hidden text-xl md:text-3xl font-bold text-secondary-foreground">
+          BABS-SPORT
+        </h1>
 
         {userLoggedIn? (
-            <div className="w-full h-full">
-            <div className="flex items-center justify-between">
-                <h1 className="text-secondary-foreground">
-                    My Profile
-                </h1>
+            <>
+                <div className="flex items-center justify-between">
+                    <h1 className="text-secondary-foreground">
+                        My Profile
+                    </h1>
 
-                <div className="">
-                <Popover>
-                    <PopoverTrigger render={<Button className='bg-secondary-foreground/20 rounded-lg cursor-pointer hover:bg-secondary-foreground/20'>
-                        <BsThreeDotsVertical/>
-                    </Button>} />
-                    <PopoverContent className="w-36 py-4 bg-primary/80 backdrop-blur-md text-foreground mr-6">
-                        <ul className="flex flex-col gap-8">
-                            {popoverList.map((list)=>(
-                                <li className="cursor-pointer" key={list.name}>
-                                    {list.onClick? (
-                                        <div onClick={list.onClick} className={`flex items-center gap-2  `}>
-                                        <span>
-                                            {list.icon}
-                                        </span>
-                                        <p >
-                                            {list.name}
-                                        </p>
-                                    </div>
-                                    ):(
-                                        <Link href={list.link} className={`flex items-center gap-2 text-red-400 `}>
-                                        <span>
-                                            {list.icon}
-                                        </span>
-                                        <p >
-                                            {list.name}
-                                        </p>
-                                    </Link>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    </PopoverContent>
-                    </Popover>
+                    <div className="">
+                    <Popover>
+                        <PopoverTrigger render={<Button className='bg-secondary-foreground/20 rounded-lg cursor-pointer hover:bg-secondary-foreground/20'>
+                            <BsThreeDotsVertical/>
+                        </Button>} />
+                        <PopoverContent className="w-36 py-4 bg-primary/80 backdrop-blur-md text-foreground mr-6">
+                            <ul className="flex flex-col gap-8">
+                                {popoverList.map((list)=>(
+                                    <li className="cursor-pointer" key={list.name}>
+                                        {list.onClick? (
+                                            <div onClick={list.onClick} className={`flex items-center gap-2  `}>
+                                            <span>
+                                                {list.icon}
+                                            </span>
+                                            <p >
+                                                {list.name}
+                                            </p>
+                                        </div>
+                                        ):(
+                                            <Link href={list.link} className={`flex items-center gap-2 text-red-400 `}>
+                                            <span>
+                                                {list.icon}
+                                            </span>
+                                            <p >
+                                                {list.name}
+                                            </p>
+                                        </Link>
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        </PopoverContent>
+                        </Popover>
+                    </div>
                 </div>
-            </div>
 
-            <div className="mt-8">
-                <ProfileContent/>
-            </div>
-
-        </div>
+                <div className="mt-8">
+                    <ProfileContent/>
+                </div>
+            </>
         ):(
              // inactive state
              <div className="flex items-center w-full">
-             <div className="bg-primary border border-foreground/10 p-4 flex items-center gap-4 mt-24 max-w-full mx-auto rounded-lg">
-             <LuBadgeInfo className='text-secondary-foreground text-xl shrink-0' />
-             <div>
-                 You're browsing as a guest.{' '}
-                 <span className="text-secondary-foreground font-bold">Login or sign up</span>{' '}
-                 to view your profile
-             </div>
-             </div>
-         </div>
-        )}
-        
+                <div className="bg-primary border border-foreground/10 p-4 flex items-center gap-4 mt-24 max-w-full mx-auto rounded-lg">
+                    <LuBadgeInfo className='text-secondary-foreground text-xl shrink-0' />
+                    <div>
+                        You're browsing as a guest.{' '}
+                        <span className="text-secondary-foreground font-bold">Login or sign up</span>{' '}
+                        to view your profile
+                    </div>
+                </div>
+            </div>
+            )}
+        </div>
     </section>
   )
 }
