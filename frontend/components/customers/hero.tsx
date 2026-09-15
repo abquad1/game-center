@@ -35,7 +35,7 @@ function Hero() {
                         IBADAN, NIGERIA
                     </span>
 
-                    <h1 className="text-center  leading-[120%] md:leading-[100%] text-4xl md:text-6xl font-semibold  text-foreground">
+                    <h1 className="text-center md:text-left leading-[120%] md:leading-[100%] text-4xl md:text-6xl font-semibold  text-foreground">
                         Watch <span className='text-secondary font-heading'>live football</span> the right way in Lagos
                     </h1>
                 </div>
