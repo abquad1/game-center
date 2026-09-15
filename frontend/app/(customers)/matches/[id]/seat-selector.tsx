@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react"
-import type { MatchType } from "@/app/(customers)/page"
+import { MatchType } from "@/lib/data/matches"
 import {
     Dialog,
     DialogContent,
