@@ -24,9 +24,9 @@ export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="fixed bottom-0 left-0 md:left-0 md:sticky z-50 md:h-full w-full md:w-84 shrink-0 md:top-0">
+    <aside className="fixed bottom-0 left-0 md:left-0 md:sticky z-50 md:h-full w-full md:w-72 shrink-0 md:top-0">
       <div className="relative w-full h-full py-0 md:px-8 md:py-8 backdrop-blur-2xl shadow-xs shadow-secondary-foreground/50">
-        <h1 className="hidden md:flex text-3xl font-bold text-secondary-foreground">
+        <h1 className="hidden md:flex text-2xl font-bold text-secondary-foreground">
           BABS-SPORT
         </h1>
 
@@ -44,7 +44,7 @@ export default function Sidebar() {
                     href={tab.link}
                     className={`flex items-center gap-1 md:gap-3 px-2 md:px-4 py-3 rounded-none md:rounded-md text-base md:text-xl transition-colors focus:outline-0 ${
                       isActive
-                        ? 'bg-secondary-foreground/50 md:bg-primary font-bold text-secondary-foreground'
+                        ? 'bg-primary font-bold text-secondary-foreground border-l-2 border-secondary-foreground'
                         : 'bg-transparent text-foreground'
                     }`}
                   >

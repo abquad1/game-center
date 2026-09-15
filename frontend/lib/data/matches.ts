@@ -1,5 +1,15 @@
-import { MatchType } from "@/app/(customers)/page"
-
+export type MatchType = {
+  id: number;
+  league: "EPL" | "UCL" | "AFCON";
+  homeTeam: string;
+  awayTeam: string;
+  tag?: string;        
+  time: string;
+  date: string;
+  seatsLeft: number | null; 
+  price: number;
+  soldOut?: boolean;
+};
 export const upcomingMatches: MatchType[] = [
   {
     id: 1,

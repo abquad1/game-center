@@ -1,5 +1,4 @@
 'use client'
-import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -8,15 +7,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useAuth } from "@/lib/context/authContext"
-import { upcomingMatches } from '@/lib/data/matches'
-import Link from 'next/link'
+import { useAuth } from '@/lib/context/authContext'
+import MatchBookingDialog from './match-booking-dialog'
+import type { MatchType } from "@/lib/data/matches"
 
-function MatchesList() {
+type UpcomingMatchesTableProps = {
+  matches: MatchType[]
+}
+
+export default function UpcomingMatchesTable({ matches }: UpcomingMatchesTableProps) {
   const { userLoggedIn } = useAuth()
 
   return (
-    <section className="rounded-lg border border-foreground/10 overflow-x-auto">
+    <div className="mt-4 rounded-lg border border-foreground/10 overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow className="bg-primary hover:bg-primary">
@@ -29,7 +32,7 @@ function MatchesList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {upcomingMatches.map((match) => (
+          {matches.map((match) => (
             <TableRow key={match.id} className="bg-primary text-sm text-foreground/30">
               <TableCell>{match.league}</TableCell>
               <TableCell className="text-foreground/80">
@@ -48,29 +51,12 @@ function MatchesList() {
                 </h6>
               </TableCell>
               <TableCell className="text-right">
-                {match.soldOut ? (
-                  <Button disabled className="text-foreground p-2 rounded-md disabled:bg-transparent">
-                    Full
-                  </Button>
-                ) : (
-                  <Button
-                    disabled={!userLoggedIn}
-                    nativeButton={false}
-                    className="cursor-pointer text-foreground p-2 rounded-md disabled:bg-transparent"
-                    render={
-                      <Link href={`/matches/${match.id}`}>
-                        Book (₦{match.price.toLocaleString()})
-                      </Link>
-                    }
-                  />
-                )}
+                <MatchBookingDialog match={match} userLoggedIn={userLoggedIn} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </section>
+    </div>
   )
 }
-
-export default MatchesList
