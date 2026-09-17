@@ -28,21 +28,21 @@ const loginSchema = z.object({
 })
 
 // Signup extends login with name + confirm password
-const signupSchema = loginSchema
-  .extend({
-    name: z.string().min(2, "Enter your full name"),
-    confirmPassword: z.string().min(1, "Confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  })
+// const signupSchema = loginSchema
+//   .extend({
+//     name: z.string().min(2, "Enter your full name"),
+//     confirmPassword: z.string().min(1, "Confirm your password"),
+//   })
+//   .refine((data) => data.password === data.confirmPassword, {
+//     message: "Passwords do not match",
+//     path: ["confirmPassword"],
+//   })
 
 type LoginFormValues = z.infer<typeof loginSchema>
-type SignupFormValues = z.infer<typeof signupSchema>
-
+// type SignupFormValues = z.infer<typeof signupSchema>
+// 
 export default function LoginSignupDialog({onLoginSuccessAction }: { onLoginSuccessAction?: () => void }) {
-  const [mode, setMode] = useState<AuthMode>("login")
+  // const [mode, setMode] = useState<AuthMode>("login")
 
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -50,54 +50,53 @@ export default function LoginSignupDialog({onLoginSuccessAction }: { onLoginSucc
     mode: "onChange",
   })
 
-  const signupForm = useForm<SignupFormValues>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
-    mode: "onChange",
-  })
+  // const signupForm = useForm<SignupFormValues>({
+  //   resolver: zodResolver(signupSchema),
+  //   defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
+  //   mode: "onChange",
+  // })
 
 
-  const switchMode = (next: AuthMode) => {
-    setMode(next)
-  }
+  // const switchMode = (next: AuthMode) => {
+  //   setMode(next)
+  // }
 
   const resetForms = () => {
     loginForm.reset()
-    signupForm.reset()
+    // signupForm.reset()
   }
 
 
   const onLoginSubmit = loginForm.handleSubmit((data) => {
     localStorage.setItem('userLoggedIn','true')
     onLoginSuccessAction?.()
-    localStorage.setItem('email',data.email)
     console.log("Logging in...", data)
   })
 
-  const onSignupSubmit = signupForm.handleSubmit((data) => {
-    // TODO: wire up real signup call
-    console.log("Signing up...", data)
-  })
+  // const onSignupSubmit = signupForm.handleSubmit((data) => {
+  //   // TODO: wire up real signup call
+  //   console.log("Signing up...", data)
+  // })
 
   return (
     <Dialog onOpenChange={(open) => !open && resetForms()}>
       <DialogTrigger render={
         <Button className="flex items-center gap-2 cursor-pointer bg-transparent hover:bg-primary text-foreground">
           <CgProfile className="text-lg" />
-          Login / Signup
+          Login
         </Button>
       } />
 
       <DialogContent className="sm:max-w-sm bg-primary">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl text-secondary-foreground">
-            {mode === "login" ? "Welcome Back" : "Create an Account"}
+          <DialogTitle className="text-center text-base text-secondary-foreground">
+             Welcome Back
           </DialogTitle>
         </DialogHeader>
 
         {/* Tab switcher */}
-        <div className="flex w-full border border-foreground/20 rounded-md overflow-hidden">
-          <button
+        <div className="flex w-full items-center text-2xl justify-center text-white rounded-md overflow-hidden">
+          {/* <button
             type="button"
             onClick={() => switchMode("login")}
             className={`w-1/2 py-2 text-sm font-medium transition-colors ${
@@ -105,10 +104,10 @@ export default function LoginSignupDialog({onLoginSuccessAction }: { onLoginSucc
                 ? "bg-secondary-foreground text-primary"
                 : "bg-transparent text-foreground/60 hover:text-foreground"
             }`}
-          >
+          > */}
             Login
-          </button>
-          <button
+          {/* </button> */}
+          {/* <button
             type="button"
             onClick={() => switchMode("signup")}
             className={`w-1/2 py-2 text-sm font-medium transition-colors ${
@@ -118,10 +117,10 @@ export default function LoginSignupDialog({onLoginSuccessAction }: { onLoginSucc
             }`}
           >
             Signup
-          </button>
+          </button> */}
         </div>
 
-        {mode === "login" ? (
+        
           <form onSubmit={onLoginSubmit}>
             <FieldGroup>
               <Field>
@@ -145,8 +144,8 @@ export default function LoginSignupDialog({onLoginSuccessAction }: { onLoginSucc
               <Button type="submit" disabled={!loginForm.formState.isValid}>Log In</Button>
             </DialogFooter>
           </form>
-        ) : (
-          <form onSubmit={onSignupSubmit}>
+        {/* ) : ( */}
+          {/* <form onSubmit={onSignupSubmit}>
             <FieldGroup>
               <Field>
                 <Label htmlFor="signup-name">Full Name</Label>
@@ -183,7 +182,7 @@ export default function LoginSignupDialog({onLoginSuccessAction }: { onLoginSucc
               <Button type="submit" disabled={!loginForm.formState.isValid}>Sign Up</Button>
             </DialogFooter>
           </form>
-        )}
+        )} */}
       </DialogContent>
     </Dialog>
   )

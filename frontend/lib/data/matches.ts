@@ -10,6 +10,7 @@ export type MatchType = {
   price: number;
   soldOut?: boolean;
 };
+
 export const upcomingMatches: MatchType[] = [
   {
     id: 1,
@@ -116,4 +117,30 @@ export const upcomingMatches: MatchType[] = [
     seatsLeft: 27,
     price: 1000,
   },
+];
+
+
+// Admin side data
+export type UpcomingMatch = {
+  id: string;
+  league: string;
+  homeTeam: string;
+  awayTeam: string;
+  date: string;
+  time: string;
+  seatsSold: number;
+  seatsTotal: number;
+};
+
+export const upcomingMatchesData: UpcomingMatch[] = [
+  { id: "1", league: "EPL", homeTeam: "Man City", awayTeam: "Arsenal", date: "Fri 20 Jun", time: "8 PM", seatsSold: 42, seatsTotal: 50 },
+  { id: "2", league: "UCL", homeTeam: "Real Madrid", awayTeam: "Bayern", date: "Sat 21 Jun", time: "9 PM", seatsSold: 16, seatsTotal: 50 },
+  { id: "3", league: "EPL", homeTeam: "Liverpool", awayTeam: "Chelsea", date: "Sun 22 Jun", time: "4 PM", seatsSold: 8, seatsTotal: 50 },
+  { id: "4", league: "AFCON", homeTeam: "Nigeria", awayTeam: "Ghana", date: "Tue 24 Jun", time: "6 PM", seatsSold: 50, seatsTotal: 50 },
+  { id: "5", league: "EPL", homeTeam: "Man United", awayTeam: "Spurs", date: "Wed 25 Jun", time: "7:30 PM", seatsSold: 30, seatsTotal: 50 },
+  { id: "6", league: "UCL", homeTeam: "PSG", awayTeam: "Barcelona", date: "Fri 27 Jun", time: "8 PM", seatsSold: 45, seatsTotal: 50 },
+  { id: "7", league: "EPL", homeTeam: "Newcastle", awayTeam: "Aston Villa", date: "Sat 28 Jun", time: "3 PM", seatsSold: 5, seatsTotal: 50 },
+  { id: "8", league: "AFCON", homeTeam: "Egypt", awayTeam: "Senegal", date: "Sun 29 Jun", time: "5 PM", seatsSold: 22, seatsTotal: 50 },
+  { id: "9", league: "UCL", homeTeam: "Juventus", awayTeam: "AC Milan", date: "Mon 30 Jun", time: "8:45 PM", seatsSold: 12, seatsTotal: 50 },
+  { id: "10", league: "EPL", homeTeam: "Brighton", awayTeam: "Everton", date: "Wed 2 Jul", time: "8 PM", seatsSold: 38, seatsTotal: 50 },
 ];

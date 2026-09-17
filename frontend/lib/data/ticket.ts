@@ -37,3 +37,58 @@ export type TicketType = {
       seats: 1,
     },
   ];
+
+  // for admin
+  // lib/data/ticket.ts
+
+export type Ticket = {
+  bookingId: string;
+  fullName: string;
+  match: string;
+  numberOfTickets: number;
+  paid: string;
+  bookedAt: string;
+};
+
+export const tickets: Ticket[] = [
+  {
+    bookingId: "KLO-483918",
+    fullName: "Chukwuemeka Obi",
+    match: "Man City vs Arsenal",
+    numberOfTickets: 2,
+    paid: "2,000",
+    bookedAt: "Fri 20 Jun · 3:14 PM",
+  },
+  {
+    bookingId: "KLO-391047",
+    fullName: "Fatima Aliyu",
+    match: "Man City vs Arsenal",
+    numberOfTickets: 1,
+    paid: "1,000",
+    bookedAt: "Fri 20 Jun · 2:50 PM",
+  },
+  {
+    bookingId: "KLO-228810",
+    fullName: "Emeka Nwosu",
+    match: "Real Madrid vs Bayern",
+    numberOfTickets: 3,
+    paid: "3,000",
+    bookedAt: "Thu 19 Jun · 6:10 PM",
+  },
+  {
+    bookingId: "KLO-119203",
+    fullName: "Abubakar Bello",
+    match: "Man City vs Arsenal",
+    numberOfTickets: 1,
+    paid: "1,000",
+    bookedAt: "Fri 20 Jun · 1:05 PM",
+  },
+  {
+    bookingId: "KLO-003847",
+    fullName: "Ngozi Okonkwo",
+    match: "Nigeria vs Ghana",
+    numberOfTickets: 4,
+    paid: "4,000",
+    bookedAt: "Mon 16 Jun · 9:22 AM",
+  },
+]

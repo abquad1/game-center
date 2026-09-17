@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 import localFont from "next/font/local";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -10,17 +10,17 @@ import { AuthProvider } from "@/lib/context/authContext";
 const TomatoGrotesk = localFont({
   src: [
     {
-      path: "../public/fonts/SECONDARY-TYPEFACE/TomatoGrotesk-Light.otf",
+      path: "../../public/fonts/SECONDARY-TYPEFACE/TomatoGrotesk-Light.otf",
       weight: "300",
       style: "normal",
     },
     {
-      path: "../public/fonts/SECONDARY-TYPEFACE/TomatoGrotesk-Regular.otf",
+      path: "../../public/fonts/SECONDARY-TYPEFACE/TomatoGrotesk-Regular.otf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../public/fonts/SECONDARY-TYPEFACE/TomatoGrotesk-Bold.otf",
+      path: "../../public/fonts/SECONDARY-TYPEFACE/TomatoGrotesk-Bold.otf",
       weight: "700",
       style: "normal",
     },
@@ -30,7 +30,7 @@ const TomatoGrotesk = localFont({
 });
 
 const conthrax = localFont({
-  src: '../public/fonts/PRIMARY-TYPEFACE/conthrax-sb.ttf',
+  src: '../../public/fonts/PRIMARY-TYPEFACE/conthrax-sb.ttf',
   variable: '--font-heading',
 });
 
