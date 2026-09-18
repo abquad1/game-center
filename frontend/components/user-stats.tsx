@@ -14,7 +14,7 @@ function StatCard({ value, label, valueClassName = "text-foreground" }: {
   valueClassName?: string
 }) {
   return (
-    <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
+    <div className="flex flex-col items-center justify-center h-full text-center bg-primary border border-foreground/10 p-4 w-1/3 rounded-lg">
       <h3 className={`${valueClassName} text-2xl`}>{value}</h3>
       <p className="text-foreground/30 text-sm">{label}</p>
     </div>
@@ -35,7 +35,7 @@ export default function UserStats({ userLoggedIn, totalMatches, totalSpent, upco
   }
 
   return (
-    <div className="w-full flex flex-row gap-8 mt-8">
+    <div className="w-full flex flex-row gap-8 mt-8 items-stretch">
       <StatCard value={totalMatches} label="Match Attended" />
       <StatCard value={`#${totalSpent}`} label="Total Spent" valueClassName="text-secondary" />
       <StatCard value={upcomingTicket} label="Upcoming Tickets" valueClassName="text-secondary-foreground" />

@@ -38,7 +38,7 @@ export default function SettingsPage() {
         }
       }
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 mb-24 ">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold text-foreground">Settings</h2>

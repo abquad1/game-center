@@ -46,10 +46,10 @@ export default function CustomersTable() {
   }, [activeTab, search])
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+    <div className="w-full relative flex flex-col gap-8 md:gap-4">
+      <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
         <h2 className="text-xl font-semibold text-foreground">
-          Customers <span className="text-foreground/40 text-base font-normal">{customers.length} total</span>
+          Customers <span className="text-foreground/40 font-normal">({customers.length})</span>
         </h2>
         <div className="flex items-center gap-3">
           <Input
@@ -82,17 +82,17 @@ export default function CustomersTable() {
         <Table>
           <TableHeader>
             <TableRow className="bg-primary hover:bg-primary">
-              <TableHead className='pl-8'>Customer</TableHead>
+              <TableHead className='pl-2 md:pl-8'>Customer</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Matches</TableHead>
               <TableHead>Total Spent</TableHead>
-              <TableHead className="text-right pr-8">Action</TableHead>
+              <TableHead className="text-right pr-2 md:pr-8">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filtered.map((customer) => (
               <TableRow key={customer.id} className="bg-primary text-sm text-foreground/40">
-                <TableCell className="text-foreground/80 pl-8">
+                <TableCell className="text-foreground/80 pl-2 md:pl-8">
                   <div className="flex items-center gap-3">
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-xs font-semibold text-foreground">
                       {getInitials(customer.name)}
@@ -106,7 +106,7 @@ export default function CustomersTable() {
                 <TableCell>{customer.phone}</TableCell>
                 <TableCell>{customer.matches} match{customer.matches !== 1 ? 'es' : ''}</TableCell>
                 <TableCell className="text-secondary">₦{customer.totalSpent.toLocaleString()}</TableCell>
-                <TableCell className="text-right pr-8">
+                <TableCell className="text-right pr-2 md:pr-8">
                   <button
                     onClick={() => setSelectedCustomer(customer)}
                     className="text-secondary-foreground hover:underline text-sm"

@@ -120,7 +120,7 @@ function CameraScanner({
   }, [active])
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 overflow-y-auto">
       <p className="text-sm text-foreground/60">Camera scanner</p>
       <div className="relative w-full aspect-square bg-[#0f0f12] rounded-lg flex items-center justify-center overflow-hidden">
         <div id="qr-reader" className="w-full h-full" />
@@ -192,11 +192,11 @@ export default function ScanAndVerifyColumns({ active = true }: { active?: boole
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 w-full pt-8">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full pt-8">
       <div className="flex-1">
         <CameraScanner onScan={setResult} active={active} resumeKey={resumeKey} />
       </div>
-      <div className="flex-1 flex flex-col gap-4">
+      <div className="flex-1 flex flex-col gap-4 mb-24 md:mb-auto">
         <ManualBookingCheck onResult={setResult} />
 
         {result && (

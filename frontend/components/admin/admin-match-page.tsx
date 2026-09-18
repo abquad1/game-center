@@ -20,9 +20,9 @@ function MatchRow({ match, section }: { match: AdminMatch; section: 'active' | '
 
   if (section === 'past') {
     return (
-      <div className="flex items-center justify-between gap-6 px-6 py-4 border border-foreground/10 rounded-lg mb-3 text-foreground/40">
+      <div className="flex items-center justify-between gap-6 px-2 md:px-6 py-4 border border-foreground/10 rounded-lg mb-3 text-foreground/40">
         <div>
-          <h3 className="font-medium">{match.homeTeam} vs {match.awayTeam}</h3>
+          <h3 className="text-sm md:text-base font-medium">{match.homeTeam} vs {match.awayTeam}</h3>
           <p className="text-xs mt-1">{match.competition} &middot; {day} &middot; {time}</p>
         </div>
         <div className="flex items-center gap-4 text-xs">
@@ -35,9 +35,9 @@ function MatchRow({ match, section }: { match: AdminMatch; section: 'active' | '
 
   return (
     <div className="border border-foreground/10 rounded-lg overflow-hidden mb-4">
-      <div className="flex items-center justify-between gap-6 px-6 py-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 px-2 md:px-6 py-4">
         <div>
-          <h3 className="font-semibold text-foreground text-lg">{match.homeTeam} vs {match.awayTeam}</h3>
+          <h3 className="font-semibold text-foreground text-sm md:text-lg">{match.homeTeam} vs {match.awayTeam}</h3>
           <p className="text-xs text-foreground/40 mt-1">{match.competition} &middot; {day} &middot; {time}</p>
         </div>
         <div className="flex items-center gap-4">

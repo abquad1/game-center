@@ -42,7 +42,7 @@ export default function AddStaffDialog({ onAddAction }: { onAddAction: (staff: N
       <form>
         <DialogTrigger
           render={
-            <Button className="flex bg-secondary-foreground text-black hover:bg-secondary-foreground/90 font-semibold rounded-md">
+            <Button className="w-fit flex bg-secondary-foreground text-black hover:bg-secondary-foreground/90 font-semibold rounded-md">
               Add new staff
             </Button>
           }

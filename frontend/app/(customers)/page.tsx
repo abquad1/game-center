@@ -2,7 +2,7 @@
 import { upcomingMatches } from '@/lib/data/matches'
 import { useAuth } from '@/lib/context/authContext'
 import HomeHeader from '@/components/customers/home-header'
-import UserStats from '@/components/customers/user-stats'
+import UserStats from '@/components/user-stats'
 import UpcomingMatchesTable from '@/components/customers/upcoming-matches-table'
 import Hero from '@/components/customers/hero'
 import { useRouter } from 'next/navigation'
