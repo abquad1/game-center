@@ -42,7 +42,7 @@ export default function Sidebar() {
                 <li key={tab.name} className='w-1/4 shadow-xs md:shadow-none shadow-secondary-foreground md:w-full'>
                   <Link
                     href={tab.link}
-                    className={`flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3 px-2 md:px-4 py-3 rounded-none md:rounded-md text-base md:text-xl transition-colors focus:outline-0 ${
+                    className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 md:px-4 py-3 rounded-none md:rounded-md text-base md:text-xl transition-colors focus:outline-0 ${
                       isActive
                         ? 'bg-primary font-bold text-secondary-foreground border-l-2 border-secondary-foreground'
                         : 'bg-transparent text-foreground'

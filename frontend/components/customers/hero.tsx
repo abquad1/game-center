@@ -1,8 +1,8 @@
-import React from 'react'
 import { CiLocationOn } from "react-icons/ci";
 import { Button } from '../ui/button';
 import { IoTicketOutline } from "react-icons/io5";
 import { TiArrowRight } from "react-icons/ti";
+import { useRouter } from "next/navigation";
 
 const characteristics = {
     amount: '1,000',
@@ -24,6 +24,8 @@ function CharCard({ value, label, valueClassName = "text-foreground" }: {
   }
 
 function Hero() {
+
+    const router = useRouter()
   return (
     <section className='relative w-full pb-4'>
         <div className="w-full py-4 space-y-4 ">
@@ -51,7 +53,7 @@ function Hero() {
             Book your seat online, show your QR receipt, and enjoy every match on our <span className="text-foreground/80">giant HD screens</span>. Unwind between games with <span className="text-foreground/80">snooker tables, PS5 gaming,</span> and <span className="text-foreground/80">cold refreshments</span>.
             </p>
 
-            <Button className='text-xl flex py-8'>
+            <Button className='text-xl flex py-8' onClick={()=>router.push('/matches')}>
                 <IoTicketOutline className='w-20 h-20'/>
                 Book a ticket now
                 <TiArrowRight className='w-20 h-20'/>

@@ -32,7 +32,7 @@ export default async function MatchDetailPage({
           <div className="flex flex-col gap-4 items-end">
             <p>{match.league}</p>
             <p>{match.date}</p>
-            <span className='text-secondary px-2 py-1 rounded-md w-fit border border-secondary text-xs'>
+            <span className='text-secondary-foreground px-2 py-1 rounded-md w-fit border border-secondary text-xs'>
               {match.seatsLeft !== null
                 ? `${match.seatsLeft} seat${match.seatsLeft > 1 ? 's' : ''} remaining`
                 : 'Sold out'}
