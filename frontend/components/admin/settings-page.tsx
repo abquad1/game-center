@@ -44,7 +44,7 @@ export default function SettingsPage() {
           <h2 className="text-xl font-semibold text-foreground">Settings</h2>
           <p className="text-sm text-foreground/40">Manage your business, staff and preferences</p>
         </div>
-        <Button className="bg-green-600 hover:bg-green-600/90 text-white font-semibold px-5 py-2 rounded-md">
+        <Button className="bg-secondary hover:bg-secondary/10 text-white font-semibold px-5 py-2 rounded-md">
           Save changes
         </Button>
       </div>

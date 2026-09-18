@@ -28,9 +28,9 @@ export default function PaystackButton({
   onCloseAction,
 }: PaystackButtonProps) {
   const config = {
-    reference: `KLO-${Date.now()}`,
+    reference: `KLO-${crypto.randomUUID()}`,
     email,
-    amount: amount * 100, // kobo
+    amount: amount * 100, 
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
     metadata: {
       matchId,

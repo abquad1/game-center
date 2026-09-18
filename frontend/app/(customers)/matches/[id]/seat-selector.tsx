@@ -25,7 +25,7 @@ export default function SeatSelector({ match }: { match: MatchType }) {
   const [count, setCount] = useState(1)
   const [isProcessing, setIsProcessing] = useState(false)
   const { userEmail } = useAuth()
-  console.log(userEmail)
+
   const increaseCount = () => {
     if (match.seatsLeft !== null && count < match.seatsLeft) {
       setCount((prev) => prev + 1)
