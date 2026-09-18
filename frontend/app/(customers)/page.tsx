@@ -18,7 +18,7 @@ export default function Home() {
   const { userLoggedIn } = useAuth()
   const router = useRouter()
   return (
-    <section className="relative w-full ">
+    <section className="relative w-full">
       <div className="h-full">
         <HomeHeader userName={userDetails.name} />
 

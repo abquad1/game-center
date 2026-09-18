@@ -26,7 +26,7 @@ function CharCard({ value, label, valueClassName = "text-foreground" }: {
 function Hero() {
   return (
     <section className='relative w-full pb-4'>
-        <div className="w-full py-4 space-y-4 px-4">
+        <div className="w-full py-4 space-y-4 ">
             
            <div className="flex flex-col md:flex-row gap-4 md:gap-8 justify-center w-full items-center">
                 <div className="flex flex-col justify-center items-center md:items-start max-w-full md:max-w-1/2 gap-2">

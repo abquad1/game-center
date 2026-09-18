@@ -35,11 +35,10 @@ function ProfileContent() {
     const phone = personalInfo.phone
     const date = personalInfo.date
 
-    const {userLoggedIn} = useAuth()
 
   return (
-    <section className='relative w-full h-full'>
-        <div className="w-full h-full">
+    <section className='relative w-full'>
+        <div className="w-full">
             {/* first card */}
             <div className=" flex items-start justify-between gap-4 bg-primary border border-foreground/10 px-6 py-6">
                 <div className="flex items-center gap-4 ">
@@ -49,7 +48,7 @@ function ProfileContent() {
 
                     <div className="flex flex-col gap-2 ">
                         <h3 className="text-2xl">{fullName}</h3>
-                        <div className="flex items-center gap-8">
+                        <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-8">
                             <div className="flex items-center gap-1 text-sm text-foreground/50">
                                 <CiPhone />
                                 <p className="">{phone}</p>
@@ -77,19 +76,19 @@ function ProfileContent() {
             </div>
 
             {/* details card */}
-            <div className="w-full flex flex-row gap-8 mt-8 ">
-                <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-                    <h3 className="text-foreground text-2xl">{userDetails.totalMatches}</h3>
+            <div className="w-full flex flex-row gap-4 md:gap-8 mt-8 ">
+                <div className="bg-primary border border-foreground/10 p-2 md:p-4 flex flex-col w-1/3 rounded-lg">
+                    <h3 className="text-foreground text-lg md:text-2xl">{userDetails.totalMatches}</h3>
                     <p className="text-foreground/30 text-sm">Match Attended</p>
                 </div>
                 
-                <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-                    <h3 className="text-secondary text-2xl">#{userDetails.totalSpent}</h3>
+                <div className="bg-primary border border-foreground/10 p-2 md:p-4 flex flex-col w-1/3 rounded-lg">
+                    <h3 className="text-secondary text-lg md:text-2xl">#{userDetails.totalSpent}</h3>
                     <p className="text-foreground/30  text-sm">Total Spent</p>
                 </div>
 
-                <div className="bg-primary border border-foreground/10 p-4 flex flex-col w-1/3 rounded-lg">
-                    <h3 className="text-secondary-foreground text-2xl">{userDetails.upcomingTicket}</h3>
+                <div className="bg-primary border border-foreground/10 p-2 md:p-4 flex flex-col w-1/3 rounded-lg">
+                    <h3 className="text-secondary-foreground text-lg md:text-2xl">{userDetails.upcomingTicket}</h3>
                     <p className="text-foreground/30 text-sm">Upcoming Tickets</p>
                 </div>
             </div>

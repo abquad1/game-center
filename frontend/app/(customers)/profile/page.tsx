@@ -38,8 +38,8 @@ function Profile() {
     ]
 
   return (
-    <section className='relative w-full mb-2'>
-        <div className="w-full h-full">
+    <section className='relative w-full mb-8'>
+        <div className="w-full">
 
         <h1 className="block md:hidden text-xl md:text-3xl font-bold text-secondary-foreground">
           BABS-SPORT
