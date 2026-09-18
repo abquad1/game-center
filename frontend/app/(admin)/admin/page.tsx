@@ -17,7 +17,7 @@ export default function Home() {
   const { userLoggedIn } = useAuth()
   const router = useRouter()
   return (
-    <section className="relative w-full mb-2">
+    <section className="relative w-full ">
       <div className="h-full">
         <HomeHeader userName={ticketDetails.name} />
 
@@ -52,12 +52,6 @@ export default function Home() {
 
         <UpcomingMatchesPanel/>
 
-        {/* <div className="w-full flex items-center text-sm justify-between mt-4">
-          <p className="font-bold text-foreground/80">Upcoming matches</p>
-          <span className="text-secondary-foreground hover:underline cursor-pointer" onClick={()=>router.push('/matches')}>See all</span>
-        </div> */}
-
-        {/* <UpcomingMatchesTable matches={upcomingMatches.slice(0, 4)} /> */}
       </div>
     </section>
   )

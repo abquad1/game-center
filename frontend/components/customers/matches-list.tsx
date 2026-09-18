@@ -16,8 +16,8 @@ function MatchesList() {
   const { userLoggedIn } = useAuth()
 
   return (
-    <section className="rounded-lg border border-foreground/10 overflow-x-auto">
-      <Table>
+    <section className="rounded-lg border border-foreground/10 overflow-x-auto w-full">
+      <Table >
         <TableHeader>
           <TableRow className="bg-primary hover:bg-primary">
             <TableHead>League</TableHead>

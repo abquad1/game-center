@@ -104,7 +104,7 @@ function ProfileContent() {
                 </span>
             </div>
 
-            <div className=" py-8">
+            <div className="pt-8">
                 <BookingHistoryTable/>
             </div>
         </div>

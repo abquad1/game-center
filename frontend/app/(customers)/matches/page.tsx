@@ -2,7 +2,7 @@ import MatchesList from '@/components/customers/matches-list'
 
 function Matches() {
   return (
-    <div>
+    <div className='w-full pb-8'>
         <MatchesList/>
     </div>
   )

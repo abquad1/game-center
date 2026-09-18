@@ -19,7 +19,7 @@ export default function UpcomingMatchesTable({ matches }: UpcomingMatchesTablePr
   const { userLoggedIn } = useAuth()
 
   return (
-    <div className="mt-4 rounded-lg border border-foreground/10 overflow-x-auto">
+    <div className="mt-4 rounded-lg border border-foreground/10 overflow-x-auto ">
       <Table>
         <TableHeader>
           <TableRow className="bg-primary hover:bg-primary">
