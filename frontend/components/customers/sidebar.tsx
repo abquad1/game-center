@@ -39,7 +39,7 @@ export default function Sidebar() {
                   : pathname.startsWith(tab.link)
 
               return (
-                <li key={tab.name} className='w-1/5 shadow-xs md:shadow-none shadow-secondary-foreground md:w-full'>
+                <li key={tab.name} className='w-1/4 shadow-xs md:shadow-none shadow-secondary-foreground md:w-full'>
                   <Link
                     href={tab.link}
                     className={`flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3 px-2 md:px-4 py-3 rounded-none md:rounded-md text-base md:text-xl transition-colors focus:outline-0 ${
