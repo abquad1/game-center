@@ -1,9 +1,12 @@
 import LoginForm from '@/components/customers/login'
+import { Suspense } from 'react'
 6
 function Login() {
   return (
     <div>
-        <LoginForm/>
+        <Suspense fallback={null}>
+        <LoginForm />
+      </Suspense>
     </div>
   )
 }

@@ -1,9 +1,12 @@
 import SignupForm from '@/components/customers/sign-up'
+import { Suspense } from 'react'
 
 function Signup() {
   return (
     <div>
-        <SignupForm/>
+        <Suspense fallback={null}>
+        <SignupForm />
+      </Suspense>
     </div>
   )
 }

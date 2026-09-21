@@ -23,8 +23,6 @@ export default function Home() {
 
         <div className="h-px w-full bg-primary shrink-0 mt-4"></div>
 
-        {/* <Hero/> */}
-
         <UserStats
           userLoggedIn={userLoggedIn}
           totalMatches={ticketDetails.totalTickets}
