@@ -39,7 +39,6 @@ export type TicketType = {
   ];
 
   // for admin
-  // lib/data/ticket.ts
 
 export type Ticket = {
   bookingId: string;

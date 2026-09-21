@@ -20,6 +20,7 @@ import Link from 'next/link';
 import ProfileContent from '@/components/customers/profile-content';
 import { useAuth } from '@/lib/context/authContext';
 import { LuBadgeInfo } from 'react-icons/lu';
+import InactiveState from '@/lib/inactive-state';
 
 function Profile() {
     const {logout,userLoggedIn} = useAuth()
@@ -94,16 +95,7 @@ function Profile() {
             </>
         ):(
              // inactive state
-             <div className="flex items-center w-full">
-                <div className="bg-primary border border-foreground/10 p-4 flex items-center gap-4 mt-24 max-w-full mx-auto rounded-lg">
-                    <LuBadgeInfo className='text-secondary-foreground text-xl shrink-0' />
-                    <div>
-                        You're browsing as a guest.{' '}
-                        <span className="text-secondary-foreground font-bold">Login or sign up</span>{' '}
-                        to view your profile
-                    </div>
-                </div>
-            </div>
+             <InactiveState/>
             )}
         </div>
     </section>

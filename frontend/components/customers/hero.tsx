@@ -3,6 +3,7 @@ import { Button } from '../ui/button';
 import { IoTicketOutline } from "react-icons/io5";
 import { TiArrowRight } from "react-icons/ti";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/context/authContext";
 
 const characteristics = {
     amount: '1,000',
@@ -26,11 +27,21 @@ function CharCard({ value, label, valueClassName = "text-foreground" }: {
 function Hero() {
 
     const router = useRouter()
+    const {userLoggedIn} = useAuth()
+
+    const handleBook = ()=>{
+      if (userLoggedIn) {
+        router.push('/matches')    
+      } else {
+        router.push('/login')
+      }
+    }
+    
   return (
     <section className='relative w-full pb-4'>
         <div className="w-full py-4 space-y-4 ">
             
-           <div className="flex flex-col md:flex-row gap-4 md:gap-8 justify-center w-full items-center">
+           <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full items-center">
                 <div className="flex flex-col justify-center items-center md:items-start max-w-full md:max-w-1/2 gap-2">
                     <span className="flex text-secondary-foreground gap-2 w-fit rounded-full items-center border border-secondary-foreground px-4 py-1">
                         <CiLocationOn />
@@ -42,7 +53,7 @@ function Hero() {
                     </h1>
                 </div>
 
-                <div className="flex flex-wrap items-center flex-1 justify-center gap-2">
+                <div className="flex flex-wrap max-w-80 items-center flex-1 justify-center mx-auto gap-2">
                     <CharCard value={`#${characteristics.amount}`} label="Entry Per Person" valueClassName="text-secondary-foreground" />
                     <CharCard value={characteristics.totalSeats} label="Total Seats" valueClassName="text-secondary" />
                     <CharCard value={characteristics.sideAttractions} label="Side Attractions" />
@@ -53,7 +64,7 @@ function Hero() {
             Book your seat online, show your QR receipt, and enjoy every match on our <span className="text-foreground/80">giant HD screens</span>. Unwind between games with <span className="text-foreground/80">snooker tables, PS5 gaming,</span> and <span className="text-foreground/80">cold refreshments</span>.
             </p>
 
-            <Button className='text-xl flex py-8' onClick={()=>router.push('/matches')}>
+            <Button className='text-xl flex py-8' onClick={handleBook}>
                 <IoTicketOutline className='w-20 h-20'/>
                 Book a ticket now
                 <TiArrowRight className='w-20 h-20'/>

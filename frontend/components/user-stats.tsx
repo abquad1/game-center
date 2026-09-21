@@ -1,4 +1,5 @@
 'use client'
+import InactiveState from "@/lib/inactive-state"
 import { LuBadgeInfo } from "react-icons/lu"
 
 type UserStatsProps = {
@@ -24,13 +25,7 @@ function StatCard({ value, label, valueClassName = "text-foreground" }: {
 export default function UserStats({ userLoggedIn, totalMatches, totalSpent, upcomingTicket }: UserStatsProps) {
   if (!userLoggedIn) {
     return (
-      <div className="bg-primary border border-foreground/10 p-4 flex items-center gap-4 w-full rounded-lg">
-        <LuBadgeInfo className="text-secondary-foreground text-6xl md:text-base" />
-        <div>
-          You&apos;re browsing as a guest.{' '}
-          <span className="text-secondary-foreground font-bold">Login or sign up</span> to book seats and view your tickets
-        </div>
-      </div>
+     <InactiveState/>
     )
   }
 

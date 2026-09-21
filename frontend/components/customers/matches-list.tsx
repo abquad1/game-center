@@ -30,7 +30,7 @@ function MatchesList() {
         </TableHeader>
         <TableBody>
           {upcomingMatches.map((match) => (
-            <TableRow key={match.id} className="bg-primary text-sm text-foreground/30">
+            <TableRow key={match.id} className="bg-primary text-sm text-foreground/60">
               <TableCell>{match.league}</TableCell>
               <TableCell className="text-foreground/80">
                 <div className="flex items-center gap-2">
@@ -43,9 +43,9 @@ function MatchesList() {
               <TableCell>{match.time}</TableCell>
               <TableCell className="text-xs">{match.date}</TableCell>
               <TableCell className="text-xs">
-                <h6 className="text-secondary-foreground">
+                <p className="font-bold text-secondary-foreground">
                   {match.soldOut ? "Sold out" : `${match.seatsLeft} seats left`}
-                </h6>
+                </p>
               </TableCell>
               <TableCell className="text-right">
                 {match.soldOut ? (

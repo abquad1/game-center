@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { FiShare2 } from "react-icons/fi"
 import { BsQrCode } from "react-icons/bs"
 import { useAuth } from "@/lib/context/authContext"
-import { LuBadgeInfo } from "react-icons/lu"
+import InactiveState from "@/lib/inactive-state"
 
 type TabType = "all" | "upcoming" | "used"
 
@@ -177,17 +177,7 @@ const {userLoggedIn} = useAuth()
             </div>
             </>
         ):(
-            <div className="relative flex flex-col items-center w-full">
-                
-                <div className="bg-primary border border-foreground/10 p-4 flex items-center gap-4 mt-24 max-w-full mx-auto rounded-lg">
-                    <LuBadgeInfo className='text-secondary-foreground text-xl shrink-0' />
-                    <div>
-                        You're browsing as a guest.{' '}
-                        <span className="text-secondary-foreground font-bold">Login or sign up</span>{' '}
-                        to view all your tickets history
-                    </div>
-                </div>
-            </div>
+            <InactiveState/>
         )}
        </div>
             
