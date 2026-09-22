@@ -1,5 +1,4 @@
 'use client'
-import LoginSignupDialog from '@/components/customers/login-signup-dialog'
 import { useAuth } from '@/lib/context/authContext'
 import { MdOutlineEmail } from "react-icons/md"
 import { FiPhone } from "react-icons/fi"
@@ -43,7 +42,7 @@ const contactLinks = [
 ]
 
 export default function HomeHeader({ userName }: HomeHeaderProps) {
-  const { userLoggedIn, login } = useAuth()
+  const { userLoggedIn} = useAuth()
   const router = useRouter()
 
   return (

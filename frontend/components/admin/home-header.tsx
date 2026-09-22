@@ -3,16 +3,18 @@ import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import LoginSignupDialog from '@/components/admin/login-signup-dialog'
 import { useAuth } from '@/lib/context/authContext'
 import { CiSearch } from "react-icons/ci";
+import { CgProfile } from "react-icons/cg"
+import { useRouter } from 'next/navigation'
 
 type HomeHeaderProps = {
   userName: string
 }
 
 export default function HomeHeader({ userName }: HomeHeaderProps) {
-  const { userLoggedIn, login } = useAuth()
+  const { userLoggedIn } = useAuth()
+  const router = useRouter()
 
   return (
     <div className="flex items-center justify-between">
@@ -21,7 +23,10 @@ export default function HomeHeader({ userName }: HomeHeaderProps) {
           Welcome, <span className="text-amber-400">{userName.toUpperCase()}</span>
         </p>
       ) : (
-        <LoginSignupDialog onLoginSuccessAction={login} />
+        <Button onClick={()=>router.push('/admin/login')} className="flex items-center gap-2 cursor-pointer bg-transparent hover:bg-primary text-foreground">
+          <CgProfile className="text-lg" />
+          Login
+        </Button>
       )}
 
       <Field className="w-1/3">

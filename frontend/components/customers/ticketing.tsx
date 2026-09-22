@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { myTickets, TicketType } from '@/lib/data/ticket'
 import { Button } from "@/components/ui/button"
-import { FiShare2 } from "react-icons/fi"
+import { FiArrowLeft, FiShare2 } from "react-icons/fi"
 import { BsQrCode } from "react-icons/bs"
 import { useAuth } from "@/lib/context/authContext"
 import InactiveState from "@/lib/inactive-state"
@@ -11,7 +11,7 @@ type TabType = "all" | "upcoming" | "used"
 
 export default function TicketsPage() {
   const [activeTab, setActiveTab] = useState<TabType>("all")
-  const [selectedTicket, setSelectedTicket] = useState<TicketType | null>(myTickets[0] ?? null)
+  const [selectedTicket, setSelectedTicket] = useState<TicketType | null>( null)
 const {userLoggedIn} = useAuth()
   const now = new Date()
   const upcomingTickets = myTickets.filter((t) => t.date > now)
@@ -32,17 +32,17 @@ const {userLoggedIn} = useAuth()
           BABS-SPORT
         </h1>
 
-        <div className="flex flex-row gap-6 w-full h-full ">
+        <div className="flex flex-col md:flex-row gap-6 w-full h-full ">
        {userLoggedIn? (
             <>
             {/* Left — ticket list */}
-            <div className="flex flex-col gap-4 w-1/2">
+            <div className={`flex flex-col gap-4 ${selectedTicket? 'hidden md:block flex-1':'flex-auto'}`}>
                 <div className="flex items-center justify-between">
                 <h1 className="text-xl font-bold text-foreground">My tickets ({myTickets.length})</h1>
                 </div>
                 
                 {/* Tabs */}
-                <div className="flex gap-2 bg-primary p-1 rounded-md w-fit">
+                <div className="flex gap-2 bg-primary p-1 rounded-md w-fit mt-4">
                 {tabs.map((tab) => (
                     <button
                     key={tab.key}
@@ -122,11 +122,19 @@ const {userLoggedIn} = useAuth()
             </div>
 
             {/* Right — quick view */}
-            <div className="w-1/2">
+            <div className={`w-full md:flex-1 ${selectedTicket ? 'block' : 'hidden md:block'}`}>
                 {selectedTicket ? (
                 <div className="bg-primary border border-foreground/10 rounded-xl overflow-hidden sticky top-4">
+
+                    <Button
+                        onClick={() => setSelectedTicket(null)}
+                        className="flex md:hidden items-center gap-2 text-sm text-foreground/60 bg-transparent hover:bg-transparent pt-4"
+                    >
+                        <FiArrowLeft /> Back to tickets
+                    </Button>
+                    
                     <div className="text-xs text-foreground/40 px-6 pt-4">
-                    QUICK VIEW - {selectedTicket.bookingId}
+                        QUICK VIEW - {selectedTicket.bookingId}
                     </div>
 
                     <div className="mt-4 bg-secondary-foreground/90 text-primary text-center py-2">
@@ -172,7 +180,9 @@ const {userLoggedIn} = useAuth()
                     </div>
                 </div>
                 ) : (
-                <p className="text-foreground/40 text-sm">Select a ticket to view details.</p>
+                <p className="text-foreground/80 flex text-base w-full h-full mx-auto text-center items-center justify-center">
+                    Select a ticket to view details.
+                </p>
                 )}
             </div>
             </>

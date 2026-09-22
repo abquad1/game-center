@@ -20,7 +20,7 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function LoginForm() {
   const router = useRouter()
-  const { login } = useAuth()
+  const { customerlogin } = useAuth()
   const searchParams = useSearchParams()
 const redirectTo = getSafeRedirect(searchParams.get("redirect"))
 
@@ -34,7 +34,7 @@ const redirectTo = getSafeRedirect(searchParams.get("redirect"))
     // TODO: replace with real login call
     localStorage.setItem("userLoggedIn", "true")
     localStorage.setItem("email", data.email)
-    login()
+    customerlogin()
     router.replace(redirectTo)
   })
 
