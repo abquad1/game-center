@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from '../../schemas';
+import { User, UserSchema } from '../schemas';
 import { TokenModule } from '../auth/token.module'; // for JwtAuthGuard — NOT AuthModule
-import { UsersRepository } from '../../repositories';
+import { UsersRepository } from '../repositories';
 import { UserService } from './services/user.service';
 import { UsersController } from './controller/user.controller';
 

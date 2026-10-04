@@ -1,0 +1,6 @@
+export enum MatchStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED',
+}
