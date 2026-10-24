@@ -10,6 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
+  // app.use(cookieParser()); // required for req.cookies to exist — the refresh token lives there
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -19,9 +20,9 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new AllExceptionsFilter());
 
+  app.useGlobalInterceptors(new TransformInterceptor());
   const swaggerConfig = new DocumentBuilder()
     .setTitle('API')
     .setDescription('Game center API docummentation')

@@ -5,6 +5,7 @@ import configuration, { envValidationSchema } from './config/configuration';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './module/user/users.module';
 import { AuthModule } from './module/auth/auth.module';
+import { MatchesModule } from './module/match/match.module';
 
 @Module({
   imports: [
@@ -13,10 +14,11 @@ import { AuthModule } from './module/auth/auth.module';
       load: [configuration],
       validationSchema: envValidationSchema,
     }),
-    ThrottlerModule.forRoot([{ ttl: 60000, limit: 20 }]), // global default
+    ThrottlerModule.forRoot([{ ttl: 60000, limit: 20 }]),
     DatabaseModule,
     UsersModule,
     AuthModule,
+    MatchesModule,
   ],
 })
 export class AppModule {}
