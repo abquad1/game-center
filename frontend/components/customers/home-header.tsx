@@ -1,5 +1,4 @@
 "use client";
-import { useAuth } from "@/lib/context/authContext";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
@@ -8,7 +7,7 @@ import { CgProfile } from "react-icons/cg";
 import { useRouter } from "next/navigation";
 import { useGetProfileQuery } from "@/lib/api/authApi";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { getAuthToken, removeAuthToken } from "@/lib/utils/cookie";
+import { getAuthToken } from "@/lib/utils/cookie";
 
 type HomeHeaderProps = {
   userName: string;

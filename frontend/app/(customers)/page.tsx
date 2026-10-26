@@ -6,7 +6,6 @@ import UserStats from "@/components/user-stats";
 import UpcomingMatchesTable from "@/components/customers/upcoming-matches-table";
 import Hero from "@/components/customers/hero";
 import { useRouter } from "next/navigation";
-import { getAuthToken } from "@/lib/utils/cookie";
 
 const userDetails = {
   totalMatches: 14,
@@ -16,6 +15,7 @@ const userDetails = {
 
 export default function Home() {
   const router = useRouter();
+  const { userLoggedIn } = useAuth();
   return (
     <section className="relative w-full">
       <div className="h-full">
@@ -26,7 +26,7 @@ export default function Home() {
         <Hero />
 
         <UserStats
-          // token={token}
+          userLoggedIn={userLoggedIn}
           totalMatches={userDetails.totalMatches}
           totalSpent={userDetails.totalSpent}
           upcomingTicket={userDetails.upcomingTicket}

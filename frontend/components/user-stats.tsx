@@ -3,10 +3,9 @@ import { useGetProfileQuery } from "@/lib/api/authApi";
 import InactiveState from "@/lib/inactive-state";
 import { getAuthToken } from "@/lib/utils/cookie";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { LuBadgeInfo } from "react-icons/lu";
 
 type UserStatsProps = {
-  // us: boolean
+  userLoggedIn: boolean;
   totalMatches: number;
   totalSpent: string;
   upcomingTicket: number;
@@ -30,6 +29,7 @@ function StatCard({
 }
 
 export default function UserStats({
+  userLoggedIn,
   totalMatches,
   totalSpent,
   upcomingTicket,

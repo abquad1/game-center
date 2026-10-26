@@ -1,10 +1,8 @@
-import React from "react";
 import { CiPhone, CiCalendarDate, CiMail } from "react-icons/ci";
 import BookingHistoryTable from "./booking-history";
 import Link from "next/link";
 import { FaRegEdit } from "react-icons/fa";
 import { useGetProfileQuery } from "@/lib/api/authApi";
-import { skipToken } from "@reduxjs/toolkit/query";
 import { getAuthToken } from "@/lib/utils/cookie";
 
 type userType = {
