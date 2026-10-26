@@ -5,7 +5,7 @@ import { TokenModule } from './token.module';
 import { RefreshToken, RefreshTokenSchema } from '../schemas';
 import { RefreshTokenRepository } from '../repositories/index';
 import { AuthService } from './service/auth.service';
-import { AuthController } from './controllers/auth.controller';
+import { AuthController } from './controller/auth.controller';
 
 @Module({
   imports: [

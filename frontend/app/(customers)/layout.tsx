@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import localFont from "next/font/local";
-import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Sidebar from "@/components/customers/sidebar";
 import { AuthProvider } from "@/lib/context/authContext";
-
+import { Toaster } from "@/components/ui/toast";
 
 const TomatoGrotesk = localFont({
   src: [
@@ -24,14 +23,13 @@ const TomatoGrotesk = localFont({
       weight: "700",
       style: "normal",
     },
-
   ],
   variable: "--font-body",
 });
 
 const conthrax = localFont({
-  src: '../../public/fonts/PRIMARY-TYPEFACE/conthrax-sb.ttf',
-  variable: '--font-heading',
+  src: "../../public/fonts/PRIMARY-TYPEFACE/conthrax-sb.ttf",
+  variable: "--font-heading",
 });
 
 export const metadata: Metadata = {
@@ -47,14 +45,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", TomatoGrotesk.variable, conthrax.variable, "font-sans")}
+      suppressHydrationWarning
+      className={cn(
+        "h-full",
+        "antialiased",
+        TomatoGrotesk.variable,
+        conthrax.variable,
+        "font-sans",
+      )}
     >
       <body className="relative overflow-x-hidden text-foreground bg-background flex flex-row w-full h-full">
         <AuthProvider>
-          <Sidebar/>
+          <Sidebar />
           <main className="flex-1 h-screen overflow-y-auto px-2 md:px-4 py-4 md:py-8 pb-14 md:pb-auto bg-[#0f0f12]">
             {children}
           </main>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

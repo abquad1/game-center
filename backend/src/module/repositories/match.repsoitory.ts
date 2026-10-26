@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+// import { FilterQuery, Model } from 'mongoose';
+import { Model } from 'mongoose';
+// import type { FilterQuery } from 'mongoose';
+
 import { Match, MatchDocument } from '../schemas';
 import { MatchStatus } from '../../common/enum';
 export interface FindPublishedOptions {
@@ -25,7 +28,11 @@ export class MatchesRepository {
   // here to PUBLISHED so a public, unauthenticated route can never be used
   // to enumerate DRAFT or CANCELLED matches by passing a different value.
   async findPublished(options: FindPublishedOptions): Promise<MatchDocument[]> {
-    const filter: FilterQuery<MatchDocument> = {
+    // const filter: FilterQuery<MatchDocument> = {
+    //   status: MatchStatus.PUBLISHED,
+    // };
+
+    const filter: any = {
       status: MatchStatus.PUBLISHED,
     };
 
