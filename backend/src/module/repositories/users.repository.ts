@@ -17,6 +17,13 @@ export class UsersRepository {
     return await this.userModel.findOne({ email: email.toLowerCase() }).exec();
   }
 
+  async findByEmailWithPassword(email: string): Promise<UserDocument | null> {
+    return await this.userModel
+      .findOne({ email: email.toLowerCase() })
+      .select('+password')
+      .exec();
+  }
+
   async findById(id: string): Promise<UserDocument | null> {
     return await this.userModel.findById(id).exec();
   }
