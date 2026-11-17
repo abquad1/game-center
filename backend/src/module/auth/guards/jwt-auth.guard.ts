@@ -6,6 +6,11 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { UserRole } from '../../../common/enum/userEnum';
+
+type AuthenticatedRequest = Request & {
+  user: { userId: string; email: string; role: UserRole };
+};
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -17,8 +22,16 @@ export class JwtAuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException('Missing bearer token');
 
     try {
-      const payload = await this.jwtService.verifyAsync(token);
-      (request as any).user = { userId: payload.sub, email: payload.email };
+      const payload = await this.jwtService.verifyAsync<{
+        sub: string;
+        email: string;
+        role: UserRole;
+      }>(token);
+      (request as AuthenticatedRequest).user = {
+        userId: payload.sub,
+        email: payload.email,
+        role: payload.role,
+      };
     } catch {
       throw new UnauthorizedException('Invalid or expired token');
     }

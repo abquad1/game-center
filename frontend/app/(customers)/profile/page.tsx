@@ -12,32 +12,23 @@ import {
 import Link from "next/link";
 import ProfileContent from "@/components/customers/profile-content";
 import InactiveState from "@/lib/inactive-state";
-import { getAuthToken, removeAuthToken } from "@/lib/utils/cookie";
-import { skipToken } from "@reduxjs/toolkit/query";
-import { useGetProfileQuery } from "@/lib/api/authApi";
+import { removeAuthToken } from "@/lib/utils/cookie";
 import { useRouter } from "next/navigation";
+import { useProfile } from "@/lib/utils/use-profile";
 
 type PopoverListType =
   | { name: string; icon: React.ReactNode; link: string; onClick?: never }
   | { name: string; icon: React.ReactNode; link?: never; onClick: () => void };
 
 function Profile() {
-  const token = getAuthToken();
   const router = useRouter();
 
   const Logout = () => {
     removeAuthToken();
     router.push("/");
   };
-  const { data, error, isLoading } = useGetProfileQuery(
-    token ? undefined : skipToken,
-  );
 
-  if (isLoading) {
-    return null;
-  }
-
-  const isUserProfile = data?.success || !error;
+  const { isError, isAuthenticated } = useProfile();
 
   const popoverList: PopoverListType[] = [
     {
@@ -59,7 +50,7 @@ function Profile() {
           BABS-SPORT
         </h1>
 
-        {isUserProfile ? (
+        {isAuthenticated && !isError ? (
           <>
             <div className="flex items-center justify-between">
               <h1 className="text-secondary-foreground">My Profile</h1>

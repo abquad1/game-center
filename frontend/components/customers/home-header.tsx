@@ -1,23 +1,17 @@
 "use client";
+import { useEffect, useState } from "react";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { CgProfile } from "react-icons/cg";
 import { useRouter } from "next/navigation";
-import { useGetProfileQuery } from "@/lib/api/authApi";
-import { skipToken } from "@reduxjs/toolkit/query";
-import { getAuthToken } from "@/lib/utils/cookie";
+import { useProfile } from "@/lib/utils/use-profile";
 
-type HomeHeaderProps = {
-  userName: string;
-};
-
-// Replace with your real details
 const CONTACT = {
-  email: "support@babsport@gmail.com",
+  email: "support@babsport.com", // ← fix this, see note below
   phone: "+2348143967609",
-  phoneDisplay: "+234 814 396 7609 ",
+  phoneDisplay: "+234 814 396 7609",
   whatsapp: "2348143967609",
 };
 
@@ -44,27 +38,27 @@ const contactLinks = [
 ];
 
 export default function HomeHeader() {
-  const token = getAuthToken();
-
-  const { data, error, isLoading } = useGetProfileQuery(
-    token ? undefined : skipToken,
-  );
-
   const router = useRouter();
+  const { profile, isLoading, isError, isAuthenticated } = useProfile();
 
-  if (isLoading) {
-    return null;
-  }
+  // Same output on server and first client render
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  const isUserProfile = data?.success || !error;
-  const user = data?.data.fullName.split(" ")[0];
-  const userName = user
-    ? user?.slice(0, 1).toUpperCase() + user?.slice(1)
+  const firstName = profile?.fullName?.trim().split(" ")[0];
+  const userName = firstName
+    ? firstName.charAt(0).toUpperCase() + firstName.slice(1)
     : undefined;
+
+  const showWelcome = mounted && isAuthenticated && !isError && !!userName;
+  const showSkeleton = !mounted || isLoading;
 
   return (
     <div className="flex items-center justify-between gap-4">
-      {isUserProfile ? (
+      {showSkeleton ? (
+        // Placeholder the same size as the button, so nothing jumps
+        <div className="h-9 w-28 rounded-lg bg-foreground/10 animate-pulse" />
+      ) : showWelcome ? (
         <p className="text-lg">
           Welcome, <span className="text-amber-400">{userName}</span>
         </p>
@@ -84,8 +78,9 @@ export default function HomeHeader() {
             key={label}
             href={href}
             aria-label={label}
-            target="_blank"
-            rel="noopener noreferrer"
+            {...(external
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
             className="flex items-center border gap-2 px-4 py-2 border-foreground/15 text-foreground transition-colors hover:text-secondary-foreground"
           >
             <Icon className="size-5 shrink-0" />

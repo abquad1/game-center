@@ -15,7 +15,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3001',
-      'https://frontend-orcin-mu-96.vercel.app/',
+      'https://frontend-orcin-mu-96.vercel.app',
     ],
     credentials: true,
   });

@@ -10,7 +10,7 @@ type AuthContextType = {
   role: RoleType;
   RoleSet: (role: RoleType) => void;
   customerlogin: () => void;
-  adminlogin: () => void;
+  adminlogin: (email: string) => void;
   logout: () => void;
 };
 
@@ -29,14 +29,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUserEmail(localStorage.getItem("email"));
     const storedRole = localStorage.getItem("role");
 
-    storedRole === "admin" ||
-      (storedRole === "customer" && setRole(storedRole));
+    if (storedRole === "admin" || storedRole === "customer") {
+      setRole(storedRole);
+    }
   }, []);
 
   const RoleSet = (role: RoleType) => {
     setRole(role);
 
-    role ? localStorage.setItem("role", role) : localStorage.removeItem("role");
+    if (role) {
+      localStorage.setItem("role", role);
+    } else {
+      localStorage.removeItem("role");
+    }
   };
 
   const customerlogin = () => {
@@ -45,8 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUserLoggedIn(true);
   };
 
-  const adminlogin = () => {
+  const adminlogin = (email: string) => {
     RoleSet("admin");
+    setUserEmail(email);
+    localStorage.setItem("email", email);
     localStorage.setItem("userLoggedIn", "true");
     setUserLoggedIn(true);
   };
@@ -54,6 +61,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     RoleSet(null);
     localStorage.removeItem("userLoggedIn");
+    localStorage.removeItem("email");
+    setUserEmail(null);
     setUserLoggedIn(false);
     router.push("/");
   };

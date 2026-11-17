@@ -18,14 +18,14 @@ export interface SignupResponse {
 }
 
 export interface LoginResponse {
-  accessToken: string;
   success: boolean;
   statusCode: number;
   message: string;
-  user: {
-    id: string;
-    email: string;
+  data: {
+    accessToken: string;
   };
+  timestamp: string;
+  path: string;
 }
 
 export interface UserProfileResponse {
@@ -52,6 +52,7 @@ export const AuthApi = createApi({
   tagTypes: ["Profile"],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    credentials: "include",
     prepareHeaders: (headers) => {
       const token = getAuthToken();
       if (token) {
@@ -71,9 +72,25 @@ export const AuthApi = createApi({
       async onQueryStarted(_, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-
-          if (data.accessToken) {
-            setAuthToken(data.accessToken);
+          if (data.data.accessToken) {
+            setAuthToken(data.data.accessToken);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    }),
+    adminLogin: builder.mutation<LoginResponse, LoginPayload>({
+      query: (credentials) => ({
+        url: "/auth/admin/login",
+        method: "POST",
+        body: credentials,
+      }),
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data.data.accessToken) {
+            setAuthToken(data.data.accessToken);
           }
         } catch (error) {
           console.error(error);
@@ -92,7 +109,6 @@ export const AuthApi = createApi({
       async onQueryStarted(_, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-
           if (data.data.accessToken) {
             setAuthToken(data.data.accessToken);
           }
@@ -108,5 +124,9 @@ export const AuthApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useSignupMutation, useGetProfileQuery } =
-  AuthApi;
+export const {
+  useLoginMutation,
+  useAdminLoginMutation,
+  useSignupMutation,
+  useGetProfileQuery,
+} = AuthApi;

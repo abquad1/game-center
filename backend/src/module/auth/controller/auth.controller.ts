@@ -40,6 +40,18 @@ export class AuthController {
     return { accessToken: result.accessToken };
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  @Post('admin/login')
+  @ApiOperation({ summary: 'Log in as an administrator' })
+  async adminLogin(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.adminLogin(dto);
+    this.setRefreshCookie(res, result.refreshToken);
+    return { accessToken: result.accessToken };
+  }
+
   @Post('refresh')
   @ApiOperation({
     summary: 'Exchange a valid refresh token cookie for a new access token',

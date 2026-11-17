@@ -1,5 +1,4 @@
 'use client'
-import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -9,20 +8,40 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Field, FieldGroup } from "@/components/ui/field"
 import { useAuth } from "@/lib/context/authContext"
-import { buildAuthUrl, getSafeRedirect } from "@/lib/auth-redirect"
+import { getSafeRedirect } from "@/lib/auth-redirect"
+import { useAdminLoginMutation } from "@/lib/api/authApi"
+import { removeAuthToken } from "@/lib/utils/cookie"
+import { toast } from "../ui/toast"
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(12, "Password must be at least 12 characters"),
 })
 
 type LoginFormValues = z.infer<typeof loginSchema>
 
+function getLoginErrorMessage(error: unknown): string {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "data" in error &&
+    typeof error.data === "object" &&
+    error.data !== null &&
+    "message" in error.data &&
+    typeof error.data.message === "string"
+  ) {
+    return error.data.message
+  }
+
+  return "Unable to log in. Check your credentials and try again."
+}
+
 export default function LoginForm() {
   const router = useRouter()
+  const [login, { isLoading }] = useAdminLoginMutation()
   const { adminlogin } = useAuth()
   const searchParams = useSearchParams()
-const redirectTo = getSafeRedirect(searchParams.get("redirect"))
+  const redirectTo = getSafeRedirect(searchParams.get("redirect"))
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -30,12 +49,18 @@ const redirectTo = getSafeRedirect(searchParams.get("redirect"))
     mode: "onChange",
   })
 
-  const onSubmit = form.handleSubmit((data) => {
-    // TODO: replace with real login call
-    localStorage.setItem("userLoggedIn", "true")
-    localStorage.setItem("email", data.email)
-    adminlogin()
-    router.replace(redirectTo)
+  const onSubmit = form.handleSubmit(async (data) => {
+    try {
+      await login(data).unwrap()
+      adminlogin(data.email)
+      router.replace(redirectTo)
+    } catch (error) {
+      removeAuthToken()
+      toast.add({
+        type: "error",
+        description: getLoginErrorMessage(error),
+      })
+    }
   })
 
   const { errors, isValid } = form.formState
@@ -60,8 +85,8 @@ const redirectTo = getSafeRedirect(searchParams.get("redirect"))
           </Field>
         </FieldGroup>
 
-        <Button type="submit" className="mt-4 w-full" disabled={!isValid || form.formState.isSubmitting}>
-          Log In
+        <Button type="submit" className="mt-4 w-full" disabled={!isValid || isLoading}>
+          {isLoading ? "Logging in..." : "Log In"}
         </Button>
       </form>
 

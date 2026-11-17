@@ -42,13 +42,27 @@ export class AuthService {
   }
 
   async login(dto: LoginDto): Promise<AuthResult> {
+    const user = await this.authenticateCredentials(dto);
+    return this.issueTokenPair(user.id, user.email, user.role);
+  }
+
+  async adminLogin(dto: LoginDto): Promise<AuthResult> {
+    const user = await this.authenticateCredentials(dto);
+    if (user.role !== UserRole.ADMIN) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return this.issueTokenPair(user.id, user.email, user.role);
+  }
+
+  private async authenticateCredentials(dto: LoginDto) {
     const user = await this.usersRepository.findByEmailWithPassword(dto.email);
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
     const match = await bcrypt.compare(dto.password, user.password);
     if (!match) throw new UnauthorizedException('Invalid credentials');
 
-    return this.issueTokenPair(user.id, user.email, user.role);
+    return user;
   }
 
   async refreshAccessToken(

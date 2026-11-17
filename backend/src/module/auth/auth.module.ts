@@ -6,6 +6,7 @@ import { RefreshToken, RefreshTokenSchema } from '../schemas';
 import { RefreshTokenRepository } from '../repositories/index';
 import { AuthService } from './service/auth.service';
 import { AuthController } from './controller/auth.controller';
+import { AdminProvisioningService } from './service/admin-provisioning.service';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { AuthController } from './controller/auth.controller';
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, RefreshTokenRepository],
+  providers: [AuthService, AdminProvisioningService, RefreshTokenRepository],
 })
 export class AuthModule {}

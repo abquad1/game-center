@@ -2,8 +2,7 @@ import { CiPhone, CiCalendarDate, CiMail } from "react-icons/ci";
 import BookingHistoryTable from "./booking-history";
 import Link from "next/link";
 import { FaRegEdit } from "react-icons/fa";
-import { useGetProfileQuery } from "@/lib/api/authApi";
-import { getAuthToken } from "@/lib/utils/cookie";
+import { useProfile } from "@/lib/utils/use-profile";
 
 type userType = {
   name: string;
@@ -16,17 +15,13 @@ function ProfileContent() {
   const personalInfo = {
     phone: "08143967609",
   };
-  const token = getAuthToken();
-
-  const { data, isLoading } = useGetProfileQuery(undefined, {
-    skip: !token,
-  });
+  const { profile, isLoading } = useProfile();
 
   if (isLoading) {
     return null;
   }
 
-  const userProfile = data?.data || undefined;
+  const userProfile = profile || undefined;
 
   const memberSince = userProfile?.createdAt
     ? new Date(userProfile.createdAt).toLocaleDateString("en-US", {

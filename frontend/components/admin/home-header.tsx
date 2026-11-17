@@ -1,29 +1,35 @@
-'use client'
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
-import { Field } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { useAuth } from '@/lib/context/authContext'
+"use client";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Field } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { CiSearch } from "react-icons/ci";
-import { CgProfile } from "react-icons/cg"
-import { useRouter } from 'next/navigation'
+import { CgProfile } from "react-icons/cg";
+import { useRouter } from "next/navigation";
+import { useProfile } from "@/lib/utils/use-profile";
 
 type HomeHeaderProps = {
-  userName: string
-}
+  userName: string;
+};
 
 export default function HomeHeader({ userName }: HomeHeaderProps) {
-  const { userLoggedIn } = useAuth()
-  const router = useRouter()
+  const { profile, isError, isAuthenticated } = useProfile();
+  const router = useRouter();
 
   return (
     <div className="flex items-center justify-between">
-      {userLoggedIn ? (
+      {isAuthenticated && !isError ? (
         <p className="text-lg">
-          Welcome, <span className="text-amber-400">{userName.toUpperCase()}</span>
+          Welcome,{" "}
+          <span className="text-amber-400">
+            {profile?.fullName?.toUpperCase()}
+          </span>
         </p>
       ) : (
-        <Button onClick={()=>router.push('/admin/login')} className="flex items-center gap-2 cursor-pointer bg-transparent hover:bg-primary text-foreground">
+        <Button
+          onClick={() => router.push("/admin/login")}
+          className="flex items-center gap-2 cursor-pointer bg-transparent hover:bg-primary text-foreground"
+        >
           <CgProfile className="text-lg" />
           Login
         </Button>
@@ -31,12 +37,16 @@ export default function HomeHeader({ userName }: HomeHeaderProps) {
 
       <Field className="w-1/3">
         <ButtonGroup className="rounded-md">
-          <Input id="input-button-group" className="border-none" placeholder="Type to search..." />
+          <Input
+            id="input-button-group"
+            className="border-none"
+            placeholder="Type to search..."
+          />
           <Button className="bg-[#1d1d1d]">
-          <CiSearch />
+            <CiSearch />
           </Button>
         </ButtonGroup>
       </Field>
     </div>
-  )
+  );
 }

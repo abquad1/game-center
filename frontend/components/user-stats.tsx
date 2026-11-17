@@ -1,8 +1,6 @@
 "use client";
-import { useGetProfileQuery } from "@/lib/api/authApi";
 import InactiveState from "@/lib/inactive-state";
-import { getAuthToken } from "@/lib/utils/cookie";
-import { skipToken } from "@reduxjs/toolkit/query";
+import { useProfile } from "@/lib/utils/use-profile";
 
 type UserStatsProps = {
   userLoggedIn: boolean;
@@ -34,19 +32,13 @@ export default function UserStats({
   totalSpent,
   upcomingTicket,
 }: UserStatsProps) {
-  const token = getAuthToken();
-
-  const { data, error, isLoading } = useGetProfileQuery(
-    token ? undefined : skipToken,
-  );
-
-  console.log(data);
+  const { profile, isLoading, isError, isAuthenticated } = useProfile();
 
   if (isLoading) {
     return null;
   }
 
-  if (error || !data?.success) {
+  if (isError || !isAuthenticated) {
     return <InactiveState />;
   }
 

@@ -15,7 +15,10 @@ export const envValidationSchema = Joi.object({
   COOKIE_SECURE: Joi.boolean().default(false),
 
   APP_URL: Joi.string().uri().default('http://localhost:3000'),
-});
+
+  ADMIN_EMAIL: Joi.string().email().lowercase(),
+  ADMIN_PASSWORD: Joi.string().min(12),
+}).and('ADMIN_EMAIL', 'ADMIN_PASSWORD');
 
 export default () => ({
   nodeEnv: process.env.NODE_ENV,
@@ -32,6 +35,10 @@ export default () => ({
   },
   cookie: {
     secure: process.env.COOKIE_SECURE !== 'false',
+  },
+  admin: {
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD,
   },
   appUrl: process.env.APP_URL,
 });
