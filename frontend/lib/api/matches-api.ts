@@ -1,68 +1,44 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getAuthToken } from "../utils/cookie";
-
-export interface Match {
-  id: string;
-  homeTeam: string;
-  awayTeam: string;
-  competition: string;
-  kickoffTime: string;
-  pricePerSeat: number;
-  availableSeats: number;
-  totalSeats: number;
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: T;
-  timestamp: string;
-  path: string;
-}
-
-export interface CreateMatchPayload {
-  homeTeam: string;
-  awayTeam: string;
-  competition: string;
-  kickoffTime: string;
-  pricePerSeat: number;
-  totalSeats: number;
-  publish: true;
-}
+import {
+  Match,
+  CreateMatchRequest,
+  CreateMatchResponse,
+} from "@/lib/data/matches";
 
 export const MatchesApi = createApi({
   reducerPath: "matchesApi",
-  tagTypes: ["Matches"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL,
-    credentials: "include",
-    prepareHeaders: (headers) => {
-      const token = getAuthToken();
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
   endpoints: (builder) => ({
-    getMatches: builder.query<ApiResponse<Match[]>, void>({
-      query: () => "/matches",
-      providesTags: ["Matches"],
+    getMatches: builder.query<Match[], { page: number; limit: number }>({
+      query: ({ page, limit }) =>
+        `/matches?page=${page}&limit=${limit}&sort=createdAt:desc`,
     }),
-    createMatch: builder.mutation<
-      ApiResponse<Match>,
-      CreateMatchPayload
-    >({
+    createMatch: builder.mutation<CreateMatchResponse, CreateMatchRequest>({
       query: (match) => ({
         url: "/matches",
         method: "POST",
         body: match,
       }),
-      invalidatesTags: ["Matches"],
+    }),
+    updateMatch: builder.mutation<Match, Match>({
+      query: (match) => ({
+        url: `/matches`,
+        method: "PUT",
+        body: match,
+      }),
+    }),
+    deleteMatch: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/matches/${id}`,
+        method: "DELETE",
+      }),
     }),
   }),
 });
 
-export const { useGetMatchesQuery, useCreateMatchMutation } = MatchesApi;
+export const {
+  useGetMatchesQuery,
+  useCreateMatchMutation,
+  useUpdateMatchMutation,
+  useDeleteMatchMutation,
+} = MatchesApi;
