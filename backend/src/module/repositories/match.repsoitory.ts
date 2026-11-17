@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-// import { FilterQuery, Model } from 'mongoose';
 import { Model } from 'mongoose';
-// import type { FilterQuery } from 'mongoose';
 
 import { Match, MatchDocument } from '../schemas';
 import { MatchStatus } from '../../common/enum';
+import { getUtcDayRange } from './utc-day-range';
 export interface FindPublishedOptions {
   date?: string; // ISO date string, e.g. "2026-09-27" — filters by kickoffTime's calendar day
 }
@@ -28,20 +27,16 @@ export class MatchesRepository {
   // here to PUBLISHED so a public, unauthenticated route can never be used
   // to enumerate DRAFT or CANCELLED matches by passing a different value.
   async findPublished(options: FindPublishedOptions): Promise<MatchDocument[]> {
-    // const filter: FilterQuery<MatchDocument> = {
-    //   status: MatchStatus.PUBLISHED,
-    // };
-
-    const filter: any = {
+    const filter: {
+      status: MatchStatus;
+      kickoffTime?: { $gte: Date; $lt: Date };
+    } = {
       status: MatchStatus.PUBLISHED,
     };
 
     if (options.date) {
-      const start = new Date(options.date);
-      start.setHours(0, 0, 0, 0);
-      const end = new Date(options.date);
-      end.setHours(23, 59, 59, 999);
-      filter.kickoffTime = { $gte: start, $lte: end };
+      const { start, end } = getUtcDayRange(options.date);
+      filter.kickoffTime = { $gte: start, $lt: end };
     }
 
     return this.matchModel.find(filter).sort({ kickoffTime: 1 }).exec();

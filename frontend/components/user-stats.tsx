@@ -32,7 +32,7 @@ export default function UserStats({
   totalSpent,
   upcomingTicket,
 }: UserStatsProps) {
-  const { profile, isLoading, isError, isAuthenticated } = useProfile();
+  const { isLoading, isError, isAuthenticated } = useProfile();
 
   if (isLoading) {
     return null;

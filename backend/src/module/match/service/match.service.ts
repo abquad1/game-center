@@ -45,6 +45,7 @@ export class MatchesService {
       id: m.id,
       homeTeam: m.homeTeam,
       awayTeam: m.awayTeam,
+      competition: m.competition,
       kickoffTime: m.kickoffTime,
       pricePerSeat: m.pricePerSeat,
       availableSeats: m.availableSeats,

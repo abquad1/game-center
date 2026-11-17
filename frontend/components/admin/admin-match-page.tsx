@@ -1,8 +1,29 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import AddMatchDialog, { NewMatchInput } from './add-match-dialog'
-import { adminMatches, AdminMatch } from '@/lib/data/admin-matches'
+import { AdminMatch } from '@/lib/data/admin-matches'
 import { categorizeMatches, formatMatchDate } from '@/lib/match-filters'
+import { useCreateMatchMutation, useGetMatchesQuery } from '@/lib/api/matches-api'
+import { toast } from '../ui/toast'
+
+function getMatchErrorMessage(error: unknown): string {
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'data' in error &&
+    typeof error.data === 'object' &&
+    error.data !== null &&
+    'message' in error.data
+  ) {
+    const message = error.data.message
+    if (typeof message === 'string') return message
+    if (Array.isArray(message) && message.every((item) => typeof item === 'string')) {
+      return message.join(', ')
+    }
+  }
+
+  return 'Unable to create the match. Please try again.'
+}
 
 function MatchRow({ match, section }: { match: AdminMatch; section: 'active' | 'upcoming' | 'past' }) {
   const { day, time } = formatMatchDate(match.dateTime)
@@ -68,22 +89,50 @@ function MatchRow({ match, section }: { match: AdminMatch; section: 'active' | '
 }
 
 export default function MatchesPage() {
-  const [matches, setMatches] = useState<AdminMatch[]>(adminMatches)
+  const { data, isLoading, isError } = useGetMatchesQuery()
+  const [createMatch] = useCreateMatchMutation()
+
+  const matches = useMemo<AdminMatch[]>(
+    () =>
+      (data?.data ?? []).map((match) => ({
+        id: match.id,
+        homeTeam: match.homeTeam,
+        awayTeam: match.awayTeam,
+        competition: match.competition,
+        dateTime: match.kickoffTime,
+        seatsBooked: match.totalSeats - match.availableSeats,
+        seatsTotal: match.totalSeats,
+        ticketPrice: match.pricePerSeat,
+      })),
+    [data],
+  )
 
   const { active, upcoming, past } = useMemo(() => categorizeMatches(matches), [matches])
 
-  const handleCreateMatch = (input: NewMatchInput) => {
-    const newMatch: AdminMatch = {
-      id: crypto.randomUUID(),
-      homeTeam: input.homeTeam,
-      awayTeam: input.awayTeam,
-      competition: input.competition || 'Friendly',
-      dateTime: `${input.date}T${input.time}:00`,
-      seatsBooked: 0,
-      seatsTotal: Number(input.seatCapacity) || 0,
-      ticketPrice: Number(input.ticketPrice) || 0,
+  const handleCreateMatch = async (input: NewMatchInput): Promise<boolean> => {
+    try {
+      await createMatch({
+        homeTeam: input.homeTeam,
+        awayTeam: input.awayTeam,
+        competition: input.competition || 'Friendly',
+        kickoffTime: new Date(`${input.date}T${input.time}:00`).toISOString(),
+        pricePerSeat: Number(input.ticketPrice) || 0,
+        totalSeats: Number(input.seatCapacity),
+        publish: true,
+      }).unwrap()
+
+      toast.add({
+        type: 'success',
+        description: 'Match created and published.',
+      })
+      return true
+    } catch (error) {
+      toast.add({
+        type: 'error',
+        description: getMatchErrorMessage(error),
+      })
+      return false
     }
-    setMatches((prev) => [...prev, newMatch])
   }
 
   return (
@@ -102,7 +151,11 @@ export default function MatchesPage() {
 
       <div>
         <p className="text-xs text-foreground/40 uppercase tracking-widest mb-3">Upcoming</p>
-        {upcoming.length > 0
+        {isLoading
+          ? <p className="text-sm text-foreground/30">Loading matches...</p>
+          : isError
+            ? <p className="text-sm text-red-400">Could not load matches. Refresh the page to try again.</p>
+            : upcoming.length > 0
           ? upcoming.map((match) => <MatchRow key={match.id} match={match} section="upcoming" />)
           : <p className="text-sm text-foreground/30">No upcoming matches.</p>}
       </div>

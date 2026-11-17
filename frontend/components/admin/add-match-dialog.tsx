@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Field, FieldLabel } from "@/components/ui/field"
@@ -27,9 +27,10 @@ const emptyForm: NewMatchInput = {
   homeTeam: '', awayTeam: '', competition: '', date: '', time: '', seatCapacity: '', ticketPrice: '',
 }
 
-export default function AddMatchDialog({ onCreateAction }: { onCreateAction: (match: NewMatchInput) => void }) {
+export default function AddMatchDialog({ onCreateAction }: { onCreateAction: (match: NewMatchInput) => Promise<boolean> }) {
   const [form, setForm] = useState<NewMatchInput>(emptyForm)
   const [open, setOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleChange = (field: keyof NewMatchInput) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }))
@@ -37,16 +38,25 @@ export default function AddMatchDialog({ onCreateAction }: { onCreateAction: (ma
 
   const isValid = form.homeTeam && form.awayTeam && form.date && form.time && form.seatCapacity
 
-  const handleSubmit = () => {
-    if (!isValid) return
-    onCreateAction(form)
-    setForm(emptyForm)
-    setOpen(false)
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!isValid || isSubmitting) return
+
+    setIsSubmitting(true)
+    try {
+      const created = await onCreateAction(form)
+      if (created) {
+        setForm(emptyForm)
+        setOpen(false)
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <DialogTrigger
           render={
             <Button className="bg-secondary-foreground text-black hover:bg-secondary-foreground/90 font-semibold px-5 py-2 rounded-md">
@@ -102,8 +112,8 @@ export default function AddMatchDialog({ onCreateAction }: { onCreateAction: (ma
 
           <DialogFooter className="mt-2">
             <DialogClose render={<Button className="bg-foreground/10 hover:bg-foreground/20">Cancel</Button>} />
-            <Button type="submit" onClick={handleSubmit} disabled={!isValid} className="bg-secondary-foreground text-black hover:bg-secondary-foreground/90 font-semibold disabled:opacity-40">
-              Create match
+            <Button type="submit" disabled={!isValid || isSubmitting} className="bg-secondary-foreground text-black hover:bg-secondary-foreground/90 font-semibold disabled:opacity-40">
+              {isSubmitting ? 'Creating...' : 'Create match'}
             </Button>
           </DialogFooter>
         </DialogContent>
