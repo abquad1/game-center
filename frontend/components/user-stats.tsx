@@ -3,7 +3,7 @@ import InactiveState from "@/lib/inactive-state";
 import { useProfile } from "@/lib/utils/use-profile";
 
 type UserStatsProps = {
-  userLoggedIn: boolean;
+  // userLoggedIn: boolean;
   totalMatches: number;
   totalSpent: string;
   upcomingTicket: number;
@@ -27,7 +27,7 @@ function StatCard({
 }
 
 export default function UserStats({
-  userLoggedIn,
+  // userLoggedIn,
   totalMatches,
   totalSpent,
   upcomingTicket,

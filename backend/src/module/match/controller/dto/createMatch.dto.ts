@@ -49,8 +49,8 @@ export class CreateMatchDto {
 
   @ApiPropertyOptional({
     description:
-      'If true, match is created directly as PUBLISHED. Defaults to false (DRAFT).',
-    default: false,
+      'If true (the default), create the match as PUBLISHED. Set false to save as a DRAFT.',
+    default: true,
   })
   @IsOptional()
   @IsBoolean()

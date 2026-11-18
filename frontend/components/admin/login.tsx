@@ -1,24 +1,27 @@
-'use client'
-import { useRouter, useSearchParams } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Field, FieldGroup } from "@/components/ui/field"
-import { useAuth } from "@/lib/context/authContext"
-import { getSafeRedirect } from "@/lib/auth-redirect"
-import { useAdminLoginMutation } from "@/lib/api/authApi"
-import { removeAuthToken } from "@/lib/utils/cookie"
-import { toast } from "../ui/toast"
+"use client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { useAuth } from "@/lib/context/authContext";
+import { getSafeRedirect } from "@/lib/auth-redirect";
+import { useAdminLoginMutation } from "@/lib/api/authApi";
+import { removeAuthToken } from "@/lib/utils/cookie";
+import { toast } from "../ui/toast";
 
 const loginSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Enter a valid email address"),
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Enter a valid email address"),
   password: z.string().min(12, "Password must be at least 12 characters"),
-})
+});
 
-type LoginFormValues = z.infer<typeof loginSchema>
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 function getLoginErrorMessage(error: unknown): string {
   if (
@@ -30,40 +33,38 @@ function getLoginErrorMessage(error: unknown): string {
     "message" in error.data &&
     typeof error.data.message === "string"
   ) {
-    return error.data.message
+    return error.data.message;
   }
 
-  return "Unable to log in. Check your credentials and try again."
+  return "Unable to log in. Check your credentials and try again.";
 }
 
 export default function LoginForm() {
-  const router = useRouter()
-  const [login, { isLoading }] = useAdminLoginMutation()
-  const { adminlogin } = useAuth()
-  const searchParams = useSearchParams()
-  const redirectTo = getSafeRedirect(searchParams.get("redirect"))
+  const router = useRouter();
+  const [login, { isLoading }] = useAdminLoginMutation();
+  const searchParams = useSearchParams();
+  const redirectTo = getSafeRedirect(searchParams.get("redirect"));
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
     mode: "onChange",
-  })
+  });
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
-      await login(data).unwrap()
-      adminlogin(data.email)
-      router.replace(redirectTo)
+      await login(data).unwrap();
+      router.replace(redirectTo);
     } catch (error) {
-      removeAuthToken()
+      removeAuthToken();
       toast.add({
         type: "error",
         description: getLoginErrorMessage(error),
-      })
+      });
     }
-  })
+  });
 
-  const { errors, isValid } = form.formState
+  const { errors, isValid } = form.formState;
 
   return (
     <div className="w-full max-w-sm rounded-lg bg-primary p-6 mx-auto mt-16 h-full">
@@ -75,21 +76,38 @@ export default function LoginForm() {
         <FieldGroup>
           <Field>
             <Label htmlFor="login-email">Email</Label>
-            <Input id="login-email" type="email" placeholder="you@example.com" {...form.register("email")} />
-            {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+            <Input
+              id="login-email"
+              type="email"
+              placeholder="you@example.com"
+              {...form.register("email")}
+            />
+            {errors.email && (
+              <p className="text-xs text-red-500">{errors.email.message}</p>
+            )}
           </Field>
           <Field>
             <Label htmlFor="login-password">Password</Label>
-            <Input id="login-password" type="password" placeholder="**********" {...form.register("password")} />
-            {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
+            <Input
+              id="login-password"
+              type="password"
+              placeholder="**********"
+              {...form.register("password")}
+            />
+            {errors.password && (
+              <p className="text-xs text-red-500">{errors.password.message}</p>
+            )}
           </Field>
         </FieldGroup>
 
-        <Button type="submit" className="mt-4 w-full" disabled={!isValid || isLoading}>
+        <Button
+          type="submit"
+          className="mt-4 w-full"
+          disabled={!isValid || isLoading}
+        >
           {isLoading ? "Logging in..." : "Log In"}
         </Button>
       </form>
-
     </div>
-  )
+  );
 }

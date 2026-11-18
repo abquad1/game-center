@@ -3,14 +3,15 @@ import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "../store";
+import { removeAuthToken } from "../utils/cookie";
 
 type AuthContextType = {
-  userLoggedIn: boolean;
-  userEmail: string | null;
-  role: RoleType;
-  RoleSet: (role: RoleType) => void;
-  customerlogin: () => void;
-  adminlogin: (email: string) => void;
+  // userLoggedIn: boolean;
+  // userEmail: string | null;
+  // role: RoleType;
+  // RoleSet: (role: RoleType) => void;
+  // customerlogin: () => void;
+  // adminlogin: (email: string) => void;
   logout: () => void;
 };
 
@@ -19,51 +20,47 @@ type RoleType = "admin" | "customer" | null;
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [role, setRole] = useState<RoleType>(null);
+  // const [userLoggedIn, setUserLoggedIn] = useState(false);
+  // const [userEmail, setUserEmail] = useState<string | null>(null);
+  // const [role, setRole] = useState<RoleType>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    setUserLoggedIn(localStorage.getItem("userLoggedIn") === "true");
-    setUserEmail(localStorage.getItem("email"));
-    const storedRole = localStorage.getItem("role");
+  // useEffect(() => {
+  //   // setUserLoggedIn(localStorage.getItem("userLoggedIn") === "true");
+  //   setUserEmail(localStorage.getItem("email"));
+  //   const storedRole = localStorage.getItem("role");
 
-    if (storedRole === "admin" || storedRole === "customer") {
-      setRole(storedRole);
-    }
-  }, []);
+  //   if (storedRole === "admin" || storedRole === "customer") {
+  //     setRole(storedRole);
+  //   }
+  // }, []);
 
-  const RoleSet = (role: RoleType) => {
-    setRole(role);
+  // const RoleSet = (role: RoleType) => {
+  //   setRole(role);
 
-    if (role) {
-      localStorage.setItem("role", role);
-    } else {
-      localStorage.removeItem("role");
-    }
-  };
+  //   if (role) {
+  //     localStorage.setItem("role", role);
+  //   } else {
+  //     localStorage.removeItem("role");
+  //   }
+  // };
 
-  const customerlogin = () => {
-    RoleSet("customer");
-    localStorage.setItem("userLoggedIn", "true");
-    setUserLoggedIn(true);
-  };
+  // const customerlogin = () => {
+  //   RoleSet("customer");
+  //   localStorage.setItem("userLoggedIn", "true");
+  //   // setUserLoggedIn(true);
+  // };
 
-  const adminlogin = (email: string) => {
-    RoleSet("admin");
-    setUserEmail(email);
-    localStorage.setItem("email", email);
-    localStorage.setItem("userLoggedIn", "true");
-    setUserLoggedIn(true);
-  };
+  // const adminlogin = (email: string) => {
+  //   RoleSet("admin");
+  //   setUserEmail(email);
+  //   localStorage.setItem("email", email);
+  //   localStorage.setItem("userLoggedIn", "true");
+  //   setUserLoggedIn(true);
+  // };
 
   const logout = () => {
-    RoleSet(null);
-    localStorage.removeItem("userLoggedIn");
-    localStorage.removeItem("email");
-    setUserEmail(null);
-    setUserLoggedIn(false);
+    removeAuthToken();
     router.push("/");
   };
 
@@ -71,13 +68,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <Provider store={store}>
       <AuthContext.Provider
         value={{
-          userLoggedIn,
-          adminlogin,
-          customerlogin,
+          // userLoggedIn,
+          // adminlogin,
+          // customerlogin,
           logout,
-          role,
-          RoleSet,
-          userEmail,
+          // role,
+          // RoleSet,
+          // userEmail,
         }}
       >
         {children}

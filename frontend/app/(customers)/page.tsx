@@ -15,7 +15,6 @@ const userDetails = {
 
 export default function Home() {
   const router = useRouter();
-  const { userLoggedIn } = useAuth();
   return (
     <section className="relative w-full">
       <div className="h-full">
@@ -26,7 +25,6 @@ export default function Home() {
         <Hero />
 
         <UserStats
-          userLoggedIn={userLoggedIn}
           totalMatches={userDetails.totalMatches}
           totalSpent={userDetails.totalSpent}
           upcomingTicket={userDetails.upcomingTicket}

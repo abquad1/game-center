@@ -27,7 +27,8 @@ export class MatchesService {
       pricePerSeat: dto.pricePerSeat,
       totalSeats: dto.totalSeats,
       availableSeats: dto.totalSeats, // starts fully available — no seats sold yet
-      status: dto.publish ? MatchStatus.PUBLISHED : MatchStatus.DRAFT,
+      status:
+        dto.publish === false ? MatchStatus.DRAFT : MatchStatus.PUBLISHED,
       externalFixtureId: dto.externalFixtureId,
       createdBy: createdBy as any,
     });

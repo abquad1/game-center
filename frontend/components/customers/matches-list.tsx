@@ -1,5 +1,5 @@
-'use client'
-import { Button } from "@/components/ui/button"
+"use client";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,17 +7,35 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useAuth } from "@/lib/context/authContext"
-import { upcomingMatches } from '@/lib/data/matches'
-import Link from 'next/link'
+} from "@/components/ui/table";
+import { useGetMatchesQuery } from "@/lib/api/matches-api";
+import { upcomingMatches } from "@/lib/data/matches";
+import { useProfile } from "@/lib/utils/use-profile";
+import Link from "next/link";
 
 function MatchesList() {
-  const { userLoggedIn } = useAuth()
+  const { isAuthenticated } = useProfile();
+  const page = 1;
+  const limit = 20;
+  const today = new Date();
+  const date = today.toISOString().split("T")[0];
+
+  const {
+    data: matches,
+    isLoading,
+    isFetching,
+  } = useGetMatchesQuery({
+    date,
+  });
+
+  const upcomingMatche = matches;
+
+  console.log(matches);
+  console.log(upcomingMatche);
 
   return (
     <section className="rounded-lg border border-foreground/10 overflow-x-auto w-full">
-      <Table >
+      <Table>
         <TableHeader>
           <TableRow className="bg-primary hover:bg-primary">
             <TableHead>League</TableHead>
@@ -30,14 +48,21 @@ function MatchesList() {
         </TableHeader>
         <TableBody>
           {upcomingMatches.map((match) => (
-            <TableRow key={match.id} className="bg-primary text-sm text-foreground/60">
+            <TableRow
+              key={match.id}
+              className="bg-primary text-sm text-foreground/60"
+            >
               <TableCell>{match.league}</TableCell>
               <TableCell className="text-foreground/80">
                 <div className="flex items-center gap-2">
                   <span>{match.homeTeam}</span>
                   <span>vs</span>
                   <span>{match.awayTeam}</span>
-                  {match.tag && <span className="text-xs text-secondary ml-1">{match.tag}</span>}
+                  {match.tag && (
+                    <span className="text-xs text-secondary ml-1">
+                      {match.tag}
+                    </span>
+                  )}
                 </div>
               </TableCell>
               <TableCell>{match.time}</TableCell>
@@ -49,12 +74,15 @@ function MatchesList() {
               </TableCell>
               <TableCell className="text-right">
                 {match.soldOut ? (
-                  <Button disabled className="text-foreground p-2 rounded-md disabled:bg-transparent">
+                  <Button
+                    disabled
+                    className="text-foreground p-2 rounded-md disabled:bg-transparent"
+                  >
                     Full
                   </Button>
                 ) : (
                   <Button
-                    disabled={!userLoggedIn}
+                    disabled={!isAuthenticated}
                     nativeButton={false}
                     className="cursor-pointer text-foreground p-2 rounded-md disabled:bg-transparent"
                     render={
@@ -70,7 +98,7 @@ function MatchesList() {
         </TableBody>
       </Table>
     </section>
-  )
+  );
 }
 
-export default MatchesList
+export default MatchesList;

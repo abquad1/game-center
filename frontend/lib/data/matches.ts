@@ -43,10 +43,21 @@ export type Match = {
   __v: number;
 };
 
+export type MatchDetails = {
+  _id: string;
+  homeTeam: string;
+  awayTeam: string;
+  competition: string;
+  kickoffTime: string;
+  pricePerSeat: number;
+  totalSeats: number;
+};
+
 // Full response of POST /matches
 export type CreateMatchResponse = ApiResponse<Match>;
+export type MatchResponse = ApiResponse<MatchDetails>;
 
-// export type MatchType = {
+export // export type MatchType = {
 //   id: number;
 //   league: "EPL" | "UCL" | "AFCON";
 //   homeTeam: string;
@@ -59,7 +70,7 @@ export type CreateMatchResponse = ApiResponse<Match>;
 //   soldOut?: boolean;
 // };
 
-export const upcomingMatches: Match[] = [
+const upcomingMatches: Match[] = [
   // {
   //   id: 1,
   //   league: "EPL",
