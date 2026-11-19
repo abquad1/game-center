@@ -13,8 +13,13 @@ type HomeHeaderProps = {
 };
 
 export default function HomeHeader({ userName }: HomeHeaderProps) {
-  const { profile, isError, isAuthenticated } = useProfile();
+  const { profile, isError, isAuthenticated, isReady, isLoading } =
+    useProfile();
   const router = useRouter();
+
+  if (!isReady || isLoading) {
+    return <div className="h-7 w-40 animate-pulse rounded bg-foreground/10" />;
+  }
 
   return (
     <div className="flex items-center justify-between">

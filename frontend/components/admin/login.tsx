@@ -7,11 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { useAuth } from "@/lib/context/authContext";
-import { getSafeRedirect } from "@/lib/auth-redirect";
 import { useAdminLoginMutation } from "@/lib/api/authApi";
 import { removeAuthToken } from "@/lib/utils/cookie";
 import { toast } from "../ui/toast";
+import { ApiErrorResponse } from "@/lib/utils/apiErrorResponse";
 
 const loginSchema = z.object({
   email: z
@@ -42,8 +41,6 @@ function getLoginErrorMessage(error: unknown): string {
 export default function LoginForm() {
   const router = useRouter();
   const [login, { isLoading }] = useAdminLoginMutation();
-  const searchParams = useSearchParams();
-  const redirectTo = getSafeRedirect(searchParams.get("redirect"));
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -53,10 +50,16 @@ export default function LoginForm() {
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
-      await login(data).unwrap();
-      router.replace(redirectTo);
+      const result = await login(data).unwrap();
+      toast.add({
+        type: "success",
+        description: result.message,
+      });
+      router.push("/admin");
     } catch (error) {
       removeAuthToken();
+      console.error("Failed to signup", error);
+      const errorData = error as ApiErrorResponse;
       toast.add({
         type: "error",
         description: getLoginErrorMessage(error),

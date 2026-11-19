@@ -9,29 +9,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetMatchesQuery } from "@/lib/api/matches-api";
-import { upcomingMatches } from "@/lib/data/matches";
+import { formatMatchDate } from "@/lib/match-filters";
 import { useProfile } from "@/lib/utils/use-profile";
 import Link from "next/link";
 
 function MatchesList() {
   const { isAuthenticated } = useProfile();
-  const page = 1;
-  const limit = 20;
   const today = new Date();
   const date = today.toISOString().split("T")[0];
 
-  const {
-    data: matches,
-    isLoading,
-    isFetching,
-  } = useGetMatchesQuery({
+  const { data: matches = [] } = useGetMatchesQuery({
     date,
   });
 
-  const upcomingMatche = matches;
-
   console.log(matches);
-  console.log(upcomingMatche);
 
   return (
     <section className="rounded-lg border border-foreground/10 overflow-x-auto w-full">
@@ -47,54 +38,66 @@ function MatchesList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {upcomingMatches.map((match) => (
-            <TableRow
-              key={match.id}
-              className="bg-primary text-sm text-foreground/60"
-            >
-              <TableCell>{match.league}</TableCell>
-              <TableCell className="text-foreground/80">
-                <div className="flex items-center gap-2">
-                  <span>{match.homeTeam}</span>
-                  <span>vs</span>
-                  <span>{match.awayTeam}</span>
-                  {match.tag && (
+          {matches.map((match) => {
+            const { day, time } = formatMatchDate(match.kickoffTime);
+
+            return (
+              <TableRow
+                key={match.id}
+                className="bg-primary text-sm text-foreground/60"
+              >
+                <TableCell>{match.competition}</TableCell>
+                <TableCell className="text-foreground/80">
+                  <div className="flex items-center gap-2">
+                    <span>{match.homeTeam}</span>
+                    <span>vs</span>
+                    <span>{match.awayTeam}</span>
+                    {/* {match.tag && (
                     <span className="text-xs text-secondary ml-1">
                       {match.tag}
                     </span>
+                  )} */}
+                  </div>
+                </TableCell>
+                <TableCell>{time}</TableCell>
+                <TableCell className="text-xs">{date}</TableCell>
+                <TableCell className="text-xs">
+                  <p className="font-bold text-secondary-foreground">
+                    {match.pricePerSeat === 0
+                      ? "Sold out"
+                      : `${match.totalSeats} seats left`}
+                  </p>
+                </TableCell>
+                <TableCell className="text-right">
+                  {50 - match.totalSeats > 0 ? (
+                    <Button
+                      disabled
+                      className="text-foreground p-2 rounded-md disabled:bg-transparent"
+                    >
+                      Full
+                    </Button>
+                  ) : isAuthenticated ? (
+                    <Button
+                      nativeButton={false}
+                      className="cursor-pointer text-foreground p-2 rounded-md"
+                      render={
+                        <Link href={`/matches/${match.id}`}>
+                          Book (₦{match.pricePerSeat.toLocaleString()})
+                        </Link>
+                      }
+                    />
+                  ) : (
+                    <Button
+                      disabled
+                      className="text-foreground p-2 rounded-md disabled:bg-transparent"
+                    >
+                      Login to book
+                    </Button>
                   )}
-                </div>
-              </TableCell>
-              <TableCell>{match.time}</TableCell>
-              <TableCell className="text-xs">{match.date}</TableCell>
-              <TableCell className="text-xs">
-                <p className="font-bold text-secondary-foreground">
-                  {match.soldOut ? "Sold out" : `${match.seatsLeft} seats left`}
-                </p>
-              </TableCell>
-              <TableCell className="text-right">
-                {match.soldOut ? (
-                  <Button
-                    disabled
-                    className="text-foreground p-2 rounded-md disabled:bg-transparent"
-                  >
-                    Full
-                  </Button>
-                ) : (
-                  <Button
-                    disabled={!isAuthenticated}
-                    nativeButton={false}
-                    className="cursor-pointer text-foreground p-2 rounded-md disabled:bg-transparent"
-                    render={
-                      <Link href={`/matches/${match.id}`}>
-                        Book (₦{match.price.toLocaleString()})
-                      </Link>
-                    }
-                  />
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </section>

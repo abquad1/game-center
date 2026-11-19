@@ -44,7 +44,7 @@ export type Match = {
 };
 
 export type MatchDetails = {
-  _id: string;
+  id: string;
   homeTeam: string;
   awayTeam: string;
   competition: string;
@@ -55,7 +55,7 @@ export type MatchDetails = {
 
 // Full response of POST /matches
 export type CreateMatchResponse = ApiResponse<Match>;
-export type MatchResponse = ApiResponse<MatchDetails>;
+export type MatchResponse = ApiResponse<MatchDetails[]>;
 
 export // export type MatchType = {
 //   id: number;

@@ -1,15 +1,17 @@
-'use client'
-import { UpcomingMatch, upcomingMatchesData } from "@/lib/data/matches";
-
+"use client";
+import { useGetMatchesQuery } from "@/lib/api/matches-api";
+import { MatchDetails } from "@/lib/data/matches";
 
 function getStatus(ratio: number) {
-  if (ratio >= 1) return { label: "Sold Out", className: "bg-red-500/10 text-red-400" };
-  if (ratio >= 0.5) return { label: "Active", className: "bg-green-500/10 text-green-400" };
+  if (ratio >= 1)
+    return { label: "Sold Out", className: "bg-red-500/10 text-red-400" };
+  if (ratio >= 0.5)
+    return { label: "Active", className: "bg-green-500/10 text-green-400" };
   return { label: "Upcoming", className: "bg-amber-500/10 text-amber-400" };
 }
 
-function MatchRow({ match }: { match: UpcomingMatch }) {
-  const ratio = match.seatsSold / match.seatsTotal;
+function MatchRow({ match }: { match: MatchDetails }) {
+  const ratio = (50 - match.totalSeats) / match.totalSeats;
   const status = getStatus(ratio);
   const barColor = ratio >= 0.5 ? "bg-green-500" : "bg-amber-500";
 
@@ -19,8 +21,8 @@ function MatchRow({ match }: { match: UpcomingMatch }) {
         <span className="font-semibold text-foreground">
           {match.homeTeam} vs {match.awayTeam}
         </span>
-        <span className="text-xs text-foreground/40">
-          {match.league} &middot; {match.date} &middot; {match.time}
+        <span className="text-xs text-red-400">
+          {match.competition} &middot; {match.kickoffTime}
         </span>
       </div>
 
@@ -33,7 +35,7 @@ function MatchRow({ match }: { match: UpcomingMatch }) {
         </div>
 
         <span className="text-sm text-foreground/60 w-14 text-right">
-          {match.seatsSold}/{match.seatsTotal}
+          (50 - match.totalSeats) / match.totalSeats
         </span>
 
         <span className={`text-xs px-3 py-1 rounded-md ${status.className}`}>
@@ -45,11 +47,18 @@ function MatchRow({ match }: { match: UpcomingMatch }) {
 }
 
 export default function UpcomingMatchesPanel() {
+  const today = new Date();
+  const [date] = today.toISOString().split("T");
+  const { data: matches = [] } = useGetMatchesQuery({
+    date,
+  });
+
+  console.log(matches);
+
   return (
     <section className="bg-primary border border-foreground/10 rounded-lg p-4">
-
       <div className="flex flex-col mb-8">
-        {upcomingMatchesData.slice(0, 2).map((match) => (
+        {matches.slice(0, 2).map((match) => (
           <MatchRow key={match.id} match={match} />
         ))}
       </div>

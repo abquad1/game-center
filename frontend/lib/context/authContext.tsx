@@ -4,15 +4,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "../store";
 import { removeAuthToken } from "../utils/cookie";
+import { useLogoutMutation } from "../api/authApi";
+import { toast } from "@/components/ui/toast";
+import { ApiErrorResponse } from "../utils/apiErrorResponse";
 
 type AuthContextType = {
-  // userLoggedIn: boolean;
-  // userEmail: string | null;
-  // role: RoleType;
-  // RoleSet: (role: RoleType) => void;
-  // customerlogin: () => void;
-  // adminlogin: (email: string) => void;
-  logout: () => void;
+  // logout: () => void;
 };
 
 type RoleType = "admin" | "customer" | null;
@@ -20,65 +17,30 @@ type RoleType = "admin" | "customer" | null;
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // const [userLoggedIn, setUserLoggedIn] = useState(false);
-  // const [userEmail, setUserEmail] = useState<string | null>(null);
-  // const [role, setRole] = useState<RoleType>(null);
   const router = useRouter();
+  // const [logoutUser] = useLogoutMutation();
 
-  // useEffect(() => {
-  //   // setUserLoggedIn(localStorage.getItem("userLoggedIn") === "true");
-  //   setUserEmail(localStorage.getItem("email"));
-  //   const storedRole = localStorage.getItem("role");
-
-  //   if (storedRole === "admin" || storedRole === "customer") {
-  //     setRole(storedRole);
+  // const logout = async () => {
+  //   try {
+  //     const result = await logoutUser().unwrap();
+  //     router.push("/");
+  //     toast.add({
+  //       type: "success",
+  //       description: result.message,
+  //     });
+  //   } catch (error) {
+  //     console.error("Failed to signup", error);
+  //     const errorData = error as ApiErrorResponse;
+  //     toast.add({
+  //       type: "error",
+  //       description: errorData?.message ?? "Logout failed",
+  //     });
   //   }
-  // }, []);
-
-  // const RoleSet = (role: RoleType) => {
-  //   setRole(role);
-
-  //   if (role) {
-  //     localStorage.setItem("role", role);
-  //   } else {
-  //     localStorage.removeItem("role");
-  //   }
   // };
-
-  // const customerlogin = () => {
-  //   RoleSet("customer");
-  //   localStorage.setItem("userLoggedIn", "true");
-  //   // setUserLoggedIn(true);
-  // };
-
-  // const adminlogin = (email: string) => {
-  //   RoleSet("admin");
-  //   setUserEmail(email);
-  //   localStorage.setItem("email", email);
-  //   localStorage.setItem("userLoggedIn", "true");
-  //   setUserLoggedIn(true);
-  // };
-
-  const logout = () => {
-    removeAuthToken();
-    router.push("/");
-  };
 
   return (
     <Provider store={store}>
-      <AuthContext.Provider
-        value={{
-          // userLoggedIn,
-          // adminlogin,
-          // customerlogin,
-          logout,
-          // role,
-          // RoleSet,
-          // userEmail,
-        }}
-      >
-        {children}
-      </AuthContext.Provider>
+      <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>
     </Provider>
   );
 }

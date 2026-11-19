@@ -2,6 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   CreateMatchRequest,
   CreateMatchResponse,
+  Match,
+  MatchDetails,
   MatchResponse,
 } from "@/lib/data/matches";
 
@@ -9,12 +11,12 @@ export const MatchesApi = createApi({
   reducerPath: "matchesApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
   endpoints: (builder) => ({
-    getMatches: builder.query<MatchResponse[], { date: string }>({
+    getMatches: builder.query<MatchDetails[], { date: string }>({
       query: ({ date }) => `/matches?date=${date}`,
+      transformResponse: (res: MatchResponse) => res.data,
     }),
-    getMatchesById: builder.query<MatchResponse, string>({
+    getMatchesById: builder.query<Match, string>({
       query: (id) => `/matches/${id}`,
-      transformResponse: (res: { data: MatchResponse }) => res.data,
     }),
     createMatch: builder.mutation<CreateMatchResponse, CreateMatchRequest>({
       query: (match) => ({

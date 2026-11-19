@@ -15,6 +15,9 @@ import InactiveState from "@/lib/inactive-state";
 import { removeAuthToken } from "@/lib/utils/cookie";
 import { useRouter } from "next/navigation";
 import { useProfile } from "@/lib/utils/use-profile";
+import { toast } from "@/components/ui/toast";
+import { ApiErrorResponse } from "@/lib/utils/apiErrorResponse";
+import { useLogoutMutation } from "@/lib/api/authApi";
 
 type PopoverListType =
   | { name: string; icon: React.ReactNode; link: string; onClick?: never }
@@ -23,9 +26,25 @@ type PopoverListType =
 function Profile() {
   const router = useRouter();
 
-  const Logout = () => {
-    removeAuthToken();
-    router.push("/");
+  const [logoutUser] = useLogoutMutation();
+
+  const Logout = async () => {
+    try {
+      const result = await logoutUser().unwrap();
+      router.push("/");
+      removeAuthToken();
+      toast.add({
+        type: "success",
+        description: result.message,
+      });
+    } catch (error) {
+      console.error("Failed to signup", error);
+      const errorData = error as ApiErrorResponse;
+      toast.add({
+        type: "error",
+        description: errorData?.message ?? "Logout failed",
+      });
+    }
   };
 
   const { isError, isAuthenticated } = useProfile();

@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import * as dns from 'node:dns';
+import cookieParser from 'cookie-parser';
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 async function bootstrap() {
@@ -21,7 +22,7 @@ async function bootstrap() {
   });
 
   app.use(helmet());
-  // app.use(cookieParser()); // required for req.cookies to exist — the refresh token lives there
+  app.use(cookieParser()); // required for req.cookies to exist — the refresh token lives there
 
   app.useGlobalPipes(
     new ValidationPipe({

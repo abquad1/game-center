@@ -95,7 +95,7 @@ export class AuthController {
     res.cookie(REFRESH_COOKIE_NAME, rawRefreshToken, {
       httpOnly: true, // inaccessible to JavaScript — an XSS payload can't read or steal it
       secure, // only sent over HTTPS in production; set COOKIE_SECURE=false for local http dev
-      sameSite: 'strict', // not sent on cross-site requests — mitigates CSRF on this cookie
+      sameSite: secure ? 'none' : 'lax',
       path: '/auth', // only ever sent back to /auth/* routes, not every request to your API
       maxAge: ttlDays * 24 * 60 * 60 * 1000,
     });

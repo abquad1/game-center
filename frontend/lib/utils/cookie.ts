@@ -5,8 +5,9 @@ const AUTH_TOKEN_KEY = "auth_token";
 export const setAuthToken = (token: string) => {
   Cookies.set(AUTH_TOKEN_KEY, token, {
     expires: 7,
+    path: "/",
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "lax",
   });
 };
 
