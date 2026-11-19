@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
+  ApiResponse,
   CreateMatchRequest,
   CreateMatchResponse,
   Match,
@@ -15,8 +16,9 @@ export const MatchesApi = createApi({
       query: ({ date }) => `/matches?date=${date}`,
       transformResponse: (res: MatchResponse) => res.data,
     }),
-    getMatchesById: builder.query<Match, string>({
+    getMatchesById: builder.query<MatchDetails, string>({
       query: (id) => `/matches/${id}`,
+      transformResponse: (res: ApiResponse<MatchDetails>) => res.data,
     }),
     createMatch: builder.mutation<CreateMatchResponse, CreateMatchRequest>({
       query: (match) => ({

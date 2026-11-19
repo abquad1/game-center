@@ -22,8 +22,6 @@ function MatchesList() {
     date,
   });
 
-  console.log(matches);
-
   return (
     <section className="rounded-lg border border-foreground/10 overflow-x-auto w-full">
       <Table>
@@ -39,7 +37,7 @@ function MatchesList() {
         </TableHeader>
         <TableBody>
           {matches.map((match) => {
-            const { day, time } = formatMatchDate(match.kickoffTime);
+            const { time } = formatMatchDate(match.kickoffTime);
 
             return (
               <TableRow
