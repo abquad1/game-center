@@ -1,11 +1,11 @@
 "use client";
 import { upcomingMatches } from "@/lib/data/matches";
-import { useAuth } from "@/lib/context/authContext";
 import HomeHeader from "@/components/customers/home-header";
 import UserStats from "@/components/user-stats";
 import UpcomingMatchesTable from "@/components/customers/upcoming-matches-table";
 import Hero from "@/components/customers/hero";
 import { useRouter } from "next/navigation";
+import { useGetMatchesQuery } from "@/lib/api/matches-api";
 
 const userDetails = {
   totalMatches: 14,
@@ -15,6 +15,11 @@ const userDetails = {
 
 export default function Home() {
   const router = useRouter();
+  const today = new Date();
+  const [date] = today.toISOString().split("T");
+  const { data: matches = [] } = useGetMatchesQuery({
+    date,
+  });
   return (
     <section className="relative w-full">
       <div className="h-full">
@@ -40,7 +45,7 @@ export default function Home() {
           </span>
         </div>
 
-        <UpcomingMatchesTable matches={upcomingMatches.slice(0, 4)} />
+        <UpcomingMatchesTable matches={matches.slice(0, 4)} />
       </div>
     </section>
   );

@@ -53,8 +53,6 @@ export default function UpcomingMatchesPanel() {
     date,
   });
 
-  console.log(matches);
-
   return (
     <section className="bg-primary border border-foreground/10 rounded-lg p-4">
       <div className="flex flex-col mb-8">

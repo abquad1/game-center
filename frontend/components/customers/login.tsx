@@ -28,7 +28,6 @@ export default function LoginForm() {
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
 
-  const { customerlogin } = useAuth();
   const searchParams = useSearchParams();
   const redirectTo = getSafeRedirect(searchParams.get("redirect"));
 

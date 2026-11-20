@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   Table,
   TableBody,
@@ -6,18 +6,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useAuth } from '@/lib/context/authContext'
-import MatchBookingDialog from './match-booking-dialog'
-import type { MatchType } from "@/lib/data/matches"
+} from "@/components/ui/table";
+import MatchBookingDialog from "./match-booking-dialog";
+import type { MatchDetails } from "@/lib/data/matches";
+import { formatMatchDate } from "@/lib/match-filters";
 
 type UpcomingMatchesTableProps = {
-  matches: MatchType[]
-}
+  matches: MatchDetails[];
+};
 
-export default function UpcomingMatchesTable({ matches }: UpcomingMatchesTableProps) {
-  const { userLoggedIn } = useAuth()
-
+export default function UpcomingMatchesTable({
+  matches,
+}: UpcomingMatchesTableProps) {
   return (
     <div className="mt-4 rounded-lg border border-foreground/10 overflow-x-auto w-full mb-8 ">
       <Table>
@@ -32,31 +32,40 @@ export default function UpcomingMatchesTable({ matches }: UpcomingMatchesTablePr
           </TableRow>
         </TableHeader>
         <TableBody>
-          {matches.map((match) => (
-            <TableRow key={match.id} className="bg-primary text-sm text-foreground/30">
-              <TableCell>{match.league}</TableCell>
-              <TableCell className="text-foreground/80">
-                <div className="flex items-center gap-2">
-                  <span>{match.homeTeam}</span>
-                  <span>vs</span>
-                  <span>{match.awayTeam}</span>
-                  {match.tag && <span className="text-xs text-secondary ml-1">{match.tag}</span>}
-                </div>
-              </TableCell>
-              <TableCell>{match.time}</TableCell>
-              <TableCell className="text-xs">{match.date}</TableCell>
-              <TableCell className="text-xs">
-                <h6 className="text-secondary-foreground">
-                  {match.soldOut ? "Sold out" : `${match.seatsLeft} seats left`}
-                </h6>
-              </TableCell>
-              <TableCell className="text-right">
-                <MatchBookingDialog match={match} userLoggedIn={userLoggedIn} />
-              </TableCell>
-            </TableRow>
-          ))}
+          {matches.map((match) => {
+            const { day, time } = formatMatchDate(match.kickoffTime);
+
+            return (
+              <TableRow
+                key={match.id}
+                className="bg-primary text-sm text-foreground/30"
+              >
+                <TableCell>{match.competition}</TableCell>
+                <TableCell className="text-foreground/80">
+                  <div className="flex items-center gap-2">
+                    <span>{match.homeTeam}</span>
+                    <span>vs</span>
+                    <span>{match.awayTeam}</span>
+                    {/* {match.tag && <span className="text-xs text-secondary ml-1">{match.tag}</span>} */}
+                  </div>
+                </TableCell>
+                <TableCell>{time}</TableCell>
+                <TableCell className="text-xs">{day}</TableCell>
+                <TableCell className="text-xs">
+                  <h6 className="text-secondary-foreground">
+                    {match.totalSeats === 0
+                      ? "Sold out"
+                      : `${match.totalSeats} seats left`}
+                  </h6>
+                </TableCell>
+                <TableCell className="text-right">
+                  <MatchBookingDialog match={match} />
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }

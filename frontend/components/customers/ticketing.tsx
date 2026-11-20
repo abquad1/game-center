@@ -1,196 +1,226 @@
-'use client'
-import { useState } from "react"
-import { myTickets, TicketType } from '@/lib/data/ticket'
-import { Button } from "@/components/ui/button"
-import { FiArrowLeft, FiShare2 } from "react-icons/fi"
-import { BsQrCode } from "react-icons/bs"
-import { useAuth } from "@/lib/context/authContext"
-import InactiveState from "@/lib/inactive-state"
+"use client";
+import { useState } from "react";
+import { myTickets, TicketType } from "@/lib/data/ticket";
+import { Button } from "@/components/ui/button";
+import { FiArrowLeft, FiShare2 } from "react-icons/fi";
+import { BsQrCode } from "react-icons/bs";
+import InactiveState from "@/lib/inactive-state";
+import { useProfile } from "@/lib/utils/use-profile";
 
-type TabType = "all" | "upcoming" | "used"
+type TabType = "all" | "upcoming" | "used";
 
 export default function TicketsPage() {
-  const [activeTab, setActiveTab] = useState<TabType>("all")
-  const [selectedTicket, setSelectedTicket] = useState<TicketType | null>( null)
-const {userLoggedIn} = useAuth()
-  const now = new Date()
-  const upcomingTickets = myTickets.filter((t) => t.date > now)
-  const usedTickets = myTickets.filter((t) => t.date <= now)
+  const [activeTab, setActiveTab] = useState<TabType>("all");
+  const [selectedTicket, setSelectedTicket] = useState<TicketType | null>(null);
+  const { isAuthenticated, isError } = useProfile();
+  const now = new Date();
+  const upcomingTickets = myTickets.filter((t) => t.date > now);
+  const usedTickets = myTickets.filter((t) => t.date <= now);
 
   const visibleTickets =
-    activeTab === "all" ? myTickets : activeTab === "upcoming" ? upcomingTickets : usedTickets
+    activeTab === "all"
+      ? myTickets
+      : activeTab === "upcoming"
+        ? upcomingTickets
+        : usedTickets;
 
   const tabs: { key: TabType; label: string; count: number }[] = [
     { key: "all", label: "All", count: myTickets.length },
     { key: "upcoming", label: "Upcoming", count: upcomingTickets.length },
     { key: "used", label: "Used", count: usedTickets.length },
-  ]
+  ];
 
   return (
     <div className="relative w-full h-full overflow-y-auto overflow-x-hidden">
-        <h1 className="block md:hidden text-xl md:text-3xl mb-4 font-bold text-secondary-foreground">
-          BABS-SPORT
-        </h1>
+      <h1 className="block md:hidden text-xl md:text-3xl mb-4 font-bold text-secondary-foreground">
+        BABS-SPORT
+      </h1>
 
-        <div className="flex flex-col md:flex-row gap-6 w-full h-full ">
-       {userLoggedIn? (
-            <>
+      <div className="flex flex-col md:flex-row gap-6 w-full h-full ">
+        {isAuthenticated || !isError ? (
+          <>
             {/* Left — ticket list */}
-            <div className={`flex flex-col gap-4 ${selectedTicket? 'hidden md:block flex-1':'flex-auto'}`}>
-                <div className="flex items-center justify-between">
-                <h1 className="text-xl font-bold text-foreground">My tickets ({myTickets.length})</h1>
-                </div>
-                
-                {/* Tabs */}
-                <div className="flex gap-2 bg-primary p-1 rounded-md w-fit mt-4">
+            <div
+              className={`flex flex-col gap-4 ${selectedTicket ? "hidden md:block flex-1" : "flex-auto"}`}
+            >
+              <div className="flex items-center justify-between">
+                <h1 className="text-xl font-bold text-foreground">
+                  My tickets ({myTickets.length})
+                </h1>
+              </div>
+
+              {/* Tabs */}
+              <div className="flex gap-2 bg-primary p-1 rounded-md w-fit mt-4">
                 {tabs.map((tab) => (
-                    <button
+                  <button
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key)}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                        activeTab === tab.key
+                      activeTab === tab.key
                         ? "bg-secondary-foreground text-primary"
                         : "text-foreground/60 hover:text-foreground"
                     }`}
-                    >
+                  >
                     {tab.label} ({tab.count})
-                    </button>
+                  </button>
                 ))}
-                </div>
+              </div>
 
-                {/* Ticket list */}
-                <div className="flex flex-col gap-3">
+              {/* Ticket list */}
+              <div className="flex flex-col gap-3">
                 {visibleTickets.length === 0 && (
-                    <p className="text-foreground/40 text-sm">No tickets in this category.</p>
+                  <p className="text-foreground/40 text-sm">
+                    No tickets in this category.
+                  </p>
                 )}
 
                 {visibleTickets.map((ticket) => {
-                    const isUsed = ticket.date <= now
+                  const isUsed = ticket.date <= now;
 
-                    return (
+                  return (
                     <div
-                        key={ticket.id}
-                        onClick={() => setSelectedTicket(ticket)}
-                        className={`bg-primary border rounded-lg px-6 py-4 cursor-pointer transition-colors ${
+                      key={ticket.id}
+                      onClick={() => setSelectedTicket(ticket)}
+                      className={`bg-primary border rounded-lg px-6 py-4 cursor-pointer transition-colors ${
                         selectedTicket?.id === ticket.id
-                            ? "border-secondary-foreground"
-                            : "border-foreground/10 hover:border-foreground/30"
-                        }` }
+                          ? "border-secondary-foreground"
+                          : "border-foreground/10 hover:border-foreground/30"
+                      }`}
                     >
-                        <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-amber-400 font-medium">{ticket.bookingId}</span>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-amber-400 font-medium">
+                          {ticket.bookingId}
+                        </span>
                         {isUsed && (
-                            <span className="text-[10px] text-foreground/40 border border-foreground/20 px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] text-foreground/40 border border-foreground/20 px-2 py-0.5 rounded-full">
                             Used
-                            </span>
+                          </span>
                         )}
-                        </div>
+                      </div>
 
-                        <h3 className="text-lg text-foreground font-medium">
+                      <h3 className="text-lg text-foreground font-medium">
                         {ticket.homeTeam} vs {ticket.awayTeam}
-                        </h3>
+                      </h3>
 
-                        <p className="text-xs text-foreground/50 mt-1">
-                        {ticket.date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
-                        {' · '}
-                        {ticket.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                        {' · '}
-                        {ticket.seats} seat{ticket.seats > 1 ? 's' : ''}
-                        </p>
+                      <p className="text-xs text-foreground/50 mt-1">
+                        {ticket.date.toLocaleDateString("en-GB", {
+                          weekday: "short",
+                          day: "numeric",
+                          month: "short",
+                        })}
+                        {" · "}
+                        {ticket.date.toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                        {" · "}
+                        {ticket.seats} seat{ticket.seats > 1 ? "s" : ""}
+                      </p>
 
-                        <div className="flex gap-2 mt-3">
+                      <div className="flex gap-2 mt-3">
                         <Button
-                            onClick={(e) => {
-                            e.stopPropagation()
-                            setSelectedTicket(ticket)
-                            }}
-                            className="flex items-center gap-2 bg-secondary-foreground text-primary text-sm px-3 py-2 rounded-md"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedTicket(ticket);
+                          }}
+                          className="flex items-center gap-2 bg-secondary-foreground text-primary text-sm px-3 py-2 rounded-md"
                         >
-                            <BsQrCode /> View QR code
+                          <BsQrCode /> View QR code
                         </Button>
                         <Button
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-2 bg-transparent border border-foreground/20 text-foreground text-sm px-3 py-2 rounded-md"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-2 bg-transparent border border-foreground/20 text-foreground text-sm px-3 py-2 rounded-md"
                         >
-                            <FiShare2 /> Share
+                          <FiShare2 /> Share
                         </Button>
-                        </div>
+                      </div>
                     </div>
-                    )
+                  );
                 })}
-                </div>
+              </div>
             </div>
 
             {/* Right — quick view */}
-            <div className={`w-full md:flex-1 ${selectedTicket ? 'block' : 'hidden md:block'}`}>
-                {selectedTicket ? (
+            <div
+              className={`w-full md:flex-1 ${selectedTicket ? "block" : "hidden md:block"}`}
+            >
+              {selectedTicket ? (
                 <div className="bg-primary border border-foreground/10 rounded-xl overflow-hidden sticky top-4">
+                  <Button
+                    onClick={() => setSelectedTicket(null)}
+                    className="flex md:hidden items-center gap-2 text-sm text-foreground/60 bg-transparent hover:bg-transparent pt-4"
+                  >
+                    <FiArrowLeft /> Back to tickets
+                  </Button>
 
-                    <Button
-                        onClick={() => setSelectedTicket(null)}
-                        className="flex md:hidden items-center gap-2 text-sm text-foreground/60 bg-transparent hover:bg-transparent pt-4"
-                    >
-                        <FiArrowLeft /> Back to tickets
-                    </Button>
-                    
-                    <div className="text-xs text-foreground/40 px-6 pt-4">
-                        QUICK VIEW - {selectedTicket.bookingId}
-                    </div>
+                  <div className="text-xs text-foreground/40 px-6 pt-4">
+                    QUICK VIEW - {selectedTicket.bookingId}
+                  </div>
 
-                    <div className="mt-4 bg-secondary-foreground/90 text-primary text-center py-2">
+                  <div className="mt-4 bg-secondary-foreground/90 text-primary text-center py-2">
                     <p className="text-lg font-bold tracking-wide">KOLO</p>
                     <p className="text-xs">Football Viewing Center</p>
-                    </div>
+                  </div>
 
-                    <div className="flex flex-col items-center py-6 gap-4">
+                  <div className="flex flex-col items-center py-6 gap-4">
                     <div className="text-center">
-                        <p className="text-xs text-foreground/40">BOOKING ID</p>
-                        <p className="text-foreground font-medium">{selectedTicket.bookingId}</p>
+                      <p className="text-xs text-foreground/40">BOOKING ID</p>
+                      <p className="text-foreground font-medium">
+                        {selectedTicket.bookingId}
+                      </p>
                     </div>
 
                     {/* QR code placeholder */}
                     <div className="w-40 h-40 bg-foreground/10 rounded-md flex items-center justify-center">
-                        <BsQrCode className="text-5xl text-foreground/30" />
+                      <BsQrCode className="text-5xl text-foreground/30" />
                     </div>
-                    </div>
+                  </div>
 
-                    <div className="flex flex-col gap-3 px-6 pb-4 text-sm">
+                  <div className="flex flex-col gap-3 px-6 pb-4 text-sm">
                     <div className="flex justify-between">
-                        <span className="text-foreground/40">Match</span>
-                        <span className="text-foreground font-medium">
+                      <span className="text-foreground/40">Match</span>
+                      <span className="text-foreground font-medium">
                         {selectedTicket.homeTeam} vs {selectedTicket.awayTeam}
-                        </span>
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                        <span className="text-foreground/40">Date</span>
-                        <span className="text-foreground font-medium">
-                        {selectedTicket.date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
-                        {' · '}
-                        {selectedTicket.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                        </span>
+                      <span className="text-foreground/40">Date</span>
+                      <span className="text-foreground font-medium">
+                        {selectedTicket.date.toLocaleDateString("en-GB", {
+                          weekday: "short",
+                          day: "numeric",
+                          month: "short",
+                        })}
+                        {" · "}
+                        {selectedTicket.date.toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                        <span className="text-foreground/40">Seats</span>
-                        <span className="text-foreground font-medium">{selectedTicket.seats}</span>
+                      <span className="text-foreground/40">Seats</span>
+                      <span className="text-foreground font-medium">
+                        {selectedTicket.seats}
+                      </span>
                     </div>
-                    </div>
+                  </div>
 
-                    <div className="bg-secondary-foreground text-primary text-center text-sm font-medium py-3">
+                  <div className="bg-secondary-foreground text-primary text-center text-sm font-medium py-3">
                     SHOW TO STAFF AT ENTRANCE
-                    </div>
+                  </div>
                 </div>
-                ) : (
+              ) : (
                 <p className="text-foreground/80 flex text-base w-full h-full mx-auto text-center items-center justify-center">
-                    Select a ticket to view details.
+                  Select a ticket to view details.
                 </p>
-                )}
+              )}
             </div>
-            </>
-        ):(
-            <InactiveState/>
+          </>
+        ) : (
+          <InactiveState />
         )}
-       </div>
-            
+      </div>
     </div>
-  )
+  );
 }
